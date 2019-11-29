@@ -1,0 +1,46 @@
+<?php
+if (isset($_POST['btn'])) {
+    $a= $_POST['num1'];
+    $b= $_POST['num2'];
+    $c= $_POST['num3'];
+
+    $d = $b*$b-4*$a*$c;
+    $value =  sqrt(abs($d));
+    switch ($d) {
+
+        case $d>0:
+            echo"real root";
+            echo"Root1: /n" .(-$b+$value)/(2*$a)."<br/>
+            Root2: /n" .(-$b-$value)/(2*$a). "<br/>";
+        break;
+        case $d==0:
+            echo"Equal";
+            echo -$b/(2*$a);
+        break;
+        case $d<0:
+            echo"local";
+            echo -$b/(2*$a)."+i".-$value/(2*$a). "<br/>" .-$b/(2*$a)."-i".-$value/(2*$a). "<br/>";
+        break;
+        
+        default:
+            # code...
+            break;
+    }
+
+}
+?>
+
+<form method="post">
+input b<br/>
+ <input type="text" name="num1"/><br/>
+ input a <br/>
+ <input type="text" name="num2"/><br/>
+ input c<br/>
+ <input type="text" name="num3"/><br/>
+
+
+
+<button name="btn" >Submit</button>
+
+
+</form>
