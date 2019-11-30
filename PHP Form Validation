@@ -1,0 +1,126 @@
+<?php
+error_reporting(0);
+ $n= $ln =$g =$w =$em= "";
+ $name=$lname=$gender=$web=$email="";
+if($_SERVER["REQUEST_METHOD"]== "POST"){
+
+    if (empty($_POST["fname"])) {
+        $name = "Name is required";
+      } else {
+       
+           
+
+        if (!preg_match("/^[a-zA-Z]*$/",$n)) {
+            
+          $name = "Only letters and white space allowed";
+        }       
+        $n= text($_POST["fname"]);
+        
+      }
+ 
+
+
+ 
+    if(empty($_POST['lname'])){
+        $lname="Enter the Last name";
+    }
+    else {
+        $ln= text($_POST["lname"]);
+        if (!preg_match("/^[a-zA-Z ]*$/",$lname)) {
+          $lname = "Only letters and white space allowed";
+        }
+    }
+    if(empty($_POST["gender"])){
+        $gender="Select gender";
+    }
+    else{
+        $g= text($_POST['gender']);
+        $gender="ENTER THE GENDER";
+          }
+    
+          if (empty($_POST["web"])) {
+            $web = "ENTER THE WEBSITE";
+          } else {
+             
+         
+            
+              
+           if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$w)) {
+              $web = "Invalid URL";
+            }
+        $w = text($_POST["web"]);
+          } 
+    if(empty($_POST['email'])){
+        $email="Enter the email ";
+    } else{
+        $em= text($_POST['email']);
+        if (!filter_var($em, FILTER_VALIDATE_EMAIL)) {
+            $emaiL = "Invalid email format";
+        }
+    }
+
+      
+} 
+  
+    
+
+
+
+
+function text($data){
+    $data = trim($data);
+    $data = stripcslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+
+?>
+
+<Form method="post" action=" ">
+<table>
+<tr>
+<th>First Name:</th>
+<td><input type="text" name="fname"/> <label><?php if (isset($name)) {
+  echo $name;  
+}; ?></label> </td>
+</tr>
+<tr>
+<th>last Name:</th>
+<td><input type="text" name="lname"/> <label><?php  if (isset($lname)) {
+  echo $lname;  
+};?></label> </td>
+</tr>
+<tr>
+<th>Gender:</th>
+<td><labe>Male</label><input type="radio" name="gender" value="male"/> &nbsp; <labe>Female</label> <input type="radio" name="gender" value="female"/> <label><?php  if (isset($gender)) {
+  echo $gender;  
+};?></label> </td>
+</tr>
+<tr>
+<th>Website:</th>
+<td><input type="text" name="web"/> <label><?php  if (isset($web)) {
+  echo $web;  
+};?></label> </td>
+</tr>
+<tr>
+<th>Email:</th>
+<td><input type="text" name="email"/> <label><?php  if (isset($email)) {
+  echo $email;  
+};?></label> </td>
+</tr>
+</table>
+<button name="btn">Submit</button>
+
+</form>
+
+
+<label>First Name:</label> &nbsp; &nbsp; &nbsp; <label><?php if (isset($n)) { echo $n; }  ?></label></br>
+<label>last Name:</label> &nbsp; &nbsp; &nbsp; <label><?php if (isset($ln)) { echo $ln; }  ?></label></br>
+<label>Email:</label> &nbsp; &nbsp; &nbsp; <label><?php if (isset($em)) { echo $em; }  ?></label></br>
+<label>Gender:</label> &nbsp; &nbsp; &nbsp; <label><?php if (isset($g)) { echo $g; }  ?></label></br>
+<label>Website:</label> &nbsp; &nbsp; &nbsp; <label><?php if (isset($w)) { echo $w; }  ?></label></br>
+
+
+
+
