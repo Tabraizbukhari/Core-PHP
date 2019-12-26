@@ -242,3 +242,4 @@ echo'  <tbody>
 </table>
 </div>
 
+//footer section 3
