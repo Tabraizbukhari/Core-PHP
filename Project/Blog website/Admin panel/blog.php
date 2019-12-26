@@ -130,6 +130,12 @@ if($image != "" )
         
 
 
+  $sqla =("SELECT * FROM category");
+  $stmt = $conn->prepare($sqla);
+  $stmt->execute();
+
+  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $category = $stmt->fetchAll();
 
 }
 catch(PDOException $e)
@@ -161,9 +167,7 @@ catch(PDOException $e)
     <div class="form-group col-md-10">
     <select name="blogcategory"  class="custom-select mr-sm-2" id="inlineFormCustomSelect">
             <option selected >Select category </option>
-            <option class="form-control" name="blogcategory">Feature</option>
-            <option class="form-control" name="blogcategory">Recently</option>
-            <option class="form-control" name="blogcategory">Holiday</option>
+      <?php  foreach($category as $c){ echo'    <option class="form-control" name="blogcategory">'.$c['categories_name'].'</option> ' ;} ?>
         <!--     <option class="form-control" name="blogcategory"> </option> -->
       </select>
     </div>
@@ -237,11 +241,9 @@ echo'    <tr>
 </div>
 <div class="form-group col-md-10">
 <select name="blogcategory"  class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-<option selected >Select category </option>
-<option class="form-control" name="blogcategory">Feature</option>
-<option class="form-control" name="blogcategory">Recently</option>
-<option class="form-control" name="blogcategory">Holiday</option>
-<!--     <option class="form-control" name="blogcategory"> </option> -->
+<option selected >Select category </option>';
+foreach($category as $c){ echo'    <option class="form-control" name="blogcategory">'.$c['categories_name'].'</option> ' ;}
+echo'
 </select>
 </div>
 <div class="form-group col-md-10">
