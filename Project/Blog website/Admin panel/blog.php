@@ -274,3 +274,4 @@ echo'
   <!-- <td><a href="adminmessage.php?id='.$masg['id'].'">Edit</a></td> </div> -->
 </table>
 </div>
+//blog.php
