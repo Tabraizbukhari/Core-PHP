@@ -1,113 +1,70 @@
-<?php 
-
+<?php
 
 session_start();
-
-
-	
-	if(isset($_SESSION['username']))  
+if(isset($_SESSION['username']))  
     {  
-		$_SESSION['pagename'] = $_SERVER["PHP_SELF"];
-  	 $edname =   $_SESSION['username'];
-   	$edid =  $_SESSION['id'];
-   	$edimg =  $_SESSION['img'];  
-	$eemail =$_SESSION['mail'];
-$edabout =	$_SESSION['about'];
-	// $epage =$_SESSION["pagename"];	
-
+   $edname =   $_SESSION['username'];
+   $edid =  $_SESSION['id'];
+   $edimg =  $_SESSION['img'];  
+    $eemail =$_SESSION['mail'];
+    // $epage =$_SESSION["pagename"];
   }
     else  
     {  
-		session_unset();
-		
-		$_SESSION['pagename'] = $_SERVER["PHP_SELF"];
-	
+        session_destroy();
+        session_unset();
       //  header("location: singleartical.php");  
     }  
+    
   
-$index = $_SERVER['PHP_SELF'];
 $servername = "localhost";
 $username = "root";
 $password = "";
 
 try {
-	error_reporting(0);
+error_reporting(0);
     $conn = new PDO("mysql:host=$servername;dbname=myweb", $username, $password);
-    // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // echo "Connected successfully";
-    
-    // $sql = "CREATE TABLE adminreply(
-    //     adminid int  AUTO_INCREMENT,
-    //     aname nvarchar(100),
-    //    	aemail nvarchar(100),
-    //     aweb  nvarchar(50),
-    //     atext nvarchar(5000),
-	// 	adate nvarchar(50),
-	// 	atime nvarchar(50),
-	// 	userid int,
-	// 	PRIMARY KEY (adminid),
-    // FOREIGN KEY (userid) REFERENCES usercomment(userid)
-    //     )";
-	// 	$conn->exec($sql);
-		
+  
+// $sql = "CREATE TABLE pageinfo (
+//     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+//     page_address VARCHAR(30) NOT NULL,
+//     phone_number VARCHAR(30) NOT NULL,
+//     page_mail VARCHAR(30) NOT NULL
+//     )";
+//     $conn->exec($sql);
 
-	// slider 
-	$sql =("SELECT shead,stext,sliderimage,scategory FROM slider");
-    $stmt = $conn->prepare($sql);
-	$stmt->execute();
-	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-	$slider = $stmt->fetchAll();
+$articalid = $_GET['blogid'];
+$author = $_GET['Blogauthor'];
 
-// blogs
-$sqlb =("SELECT * FROM blog  ORDER BY blogid DESC limit 4 ");
-$stmtb = $conn->prepare($sqlb);
-$stmtb->execute();
-$resultb = $stmtb->setFetchMode(PDO::FETCH_ASSOC);
-$blogs = $stmtb->fetchAll();
+
+$sql =("SELECT * FROM singlepage ORDER BY id DESC");
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$resul = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$headdata = $stmt->fetchAll();
+
+$sqlbl =("SELECT * FROM blog WHERE blogid = $articalid");
+    $stmtb = $conn->prepare($sqlbl);
+    $stmtb->execute();
+    $resultb = $stmtb->setFetchMode(PDO::FETCH_ASSOC);
+    $blogers = $stmtb->fetchAll();
 
 
 
-
-$sqlh =("SELECT * FROM blog WHERE blogcategory LIKE '%Holiday' ORDER BY blogid DESC limit 2 ");
-$stmth = $conn->prepare($sqlh);
-$stmth->execute();
-$resulth = $stmth->setFetchMode(PDO::FETCH_ASSOC);
-$holiday = $stmth->fetchAll();
-
-$sqlbt =("SELECT abtimage,abthead,abttxt FROM about  ORDER BY abtid DESC limit 1 ");
-$stmtbt = $conn->prepare($sqlbt);
-$stmtbt->execute();
-$resultbt = $stmtbt->setFetchMode(PDO::FETCH_ASSOC);
-$about = $stmtbt->fetchAll();
-
-$sqlbl =("SELECT * FROM blog");
-$stmtb = $conn->prepare($sqlbl);
-$stmtb->execute();
-$resultb = $stmtb->setFetchMode(PDO::FETCH_ASSOC);
-$blogers = $stmtb->fetchAll();
+$sqle =("SELECT * FROM user where username ='$author' ");
+$stmte = $conn->prepare($sqle);
+$stmte->execute();
+$resule = $stmte->setFetchMode(PDO::FETCH_ASSOC);
+$user = $stmte->fetchAll();
 
 
+$sqlbl =("SELECT * FROM blog ORDER BY blogid limit 3");
+$stmtbs = $conn->prepare($sqlbl);
+$stmtbs->execute();
+$resultbs = $stmtbs->setFetchMode(PDO::FETCH_ASSOC);
+$bla = $stmtbs->fetchAll();
 
-
-$sqlho =("SELECT blogcategory FROM blog WHERE blogcategory like '%Holiday'");
-$stmtho = $conn->prepare($sqlho);
-$stmtho->execute();
-$resultho = $stmtho->setFetchMode(PDO::FETCH_ASSOC);
-$countholi = $stmtho->fetchAll();
-
-$sqlu =("SELECT userimage, username, userabout FROM user ORDER BY userid DESC");
-$stmtu = $conn->prepare($sqlu);
-$stmtu->execute();
-$resulu = $stmtu->setFetchMode(PDO::FETCH_ASSOC);
-$user = $stmtu->fetchAll();
-
-
-$sqlm =("SELECT head, messages,back_img,message_date,writer_name FROM admin_message ORDER BY id DESC");
-$stmtm = $conn->prepare($sqlm);
-$stmtm->execute();
-$resulm = $stmtm->setFetchMode(PDO::FETCH_ASSOC);
-$message = $stmtm->fetchAll();
 
 
 $sqlcate =("SELECT * FROM category Limit 3");
@@ -122,21 +79,8 @@ $stmtcat->execute();
 $resultcat = $stmtcat->setFetchMode(PDO::FETCH_ASSOC);
 $cat = $stmtcat->fetchAll();
 
-$sqlfe =("SELECT blogcategory FROM blog WHERE blogcategory like '%Feature'");
-$stmtfe = $conn->prepare($sqlfe);
-$stmtfe->execute();
-$resultfe = $stmtfe->setFetchMode(PDO::FETCH_ASSOC);
-$countfea = $stmtfe->fetchAll();
 
-if(isset($_SESSION['index'])){
-	$_SESSION['index']  += 1;
- }
- else{
-	$_SESSION['index'] = 1;
- }
-
-
- $search = $_GET['search'];
+$search = $_POST['search'];
  
  $sqlss="SELECT * FROM blog WHERE bloghead LIKE '%$search%' Or blogtag LIKE '%$search%' Or blogcategory LIKE '%$search%'";
 $stmts=$conn->prepare($sqlss);
@@ -145,347 +89,306 @@ $stmts->execute();
 $results = $stmts->setFetchMode(PDO::FETCH_ASSOC);
 $searchbox = $stmts->fetchAll();
 
+if(isset($_POST['message'])){
+$n = $_POST['name'];
+$e = $_POST['email'];
+$w = $_POST['web'];
+$mes = $_POST['mesage'];
+date_timestamp_set("Asia/Karachi");
+$date = date("y-m-d");
+$time = date('h:i:sa');
 
-	$sqla =("SELECT * FROM blog WHERE blogcategory LIKE '%Feature' ORDER BY blogid DESC limit 3 ");
-$stmta = $conn->prepare($sqla);
-$stmta->execute();
-// $last_id = $conn->lastInsertId();
-$resulta = $stmta->setFetchMode(PDO::FETCH_ASSOC);
-$feature = $stmta->fetchAll();
-	
+$sql= "INSERT INTO usercomment (uname,uemail,uweb,utext,udate, utime , blogid) VALUES ('$n','$e','$w','$mes','$date','$time','$articalid')";
+$conn->exec($sql); 
+
 
 }
-catch(PDOException $e)
-    {
-    echo "Connection failed: " . $e->getMessage();
+ 
+if(isset($_POST['admin'])){
+    
+  $id =$_POST['ide'];
+  $edname =   "Admin";
+   $eemail =$_SESSION['mail'];
+     $mes = $_POST['text'];
+     date_timestamp_set("Asia/Karachi");
+     $date = date("y-m-d");
+     $time = date('h:i:sa');
+     
+     $sql= "INSERT INTO adminreply (aname,aemail,atext,adate, atime, blogid, userid) VALUES ('$edname','$eemail','$mes','$date','$time','$articalid','$id')";
+     $conn->exec($sql); 
+     
+     
+     
+     }
+
+
+$sqlw= "SELECT *  FROM usercomment where blogid = $articalid";
+$stmtw = $conn->prepare($sqlw);
+$stmtw->execute();
+$resultw = $stmtw->setFetchMode(PDO::FETCH_ASSOC);
+$ucomment = $stmtw->fetchAll();
+
+// var_dump($ucomment);
+
+$arr = array();
+
+ foreach($ucomment as $coment){
+ 
+  array_push($arr, array("ctype" => "comment", "id"=> $coment['userid'], "name"=> $coment['uname'], "date"=> $coment['udate'], "time"=> $coment['utime'], "text"=> $coment['utext']));
+
+    $id = $coment['userid'];
+
+$sqlar= "SELECT *  FROM adminreply where userid = $id ";
+$stmtar = $conn->prepare($sqlar);
+$stmtar->execute();
+$resultar = $stmtar->setFetchMode(PDO::FETCH_ASSOC);
+$adrply = $stmtar->fetchAll();
+
+  foreach($adrply as $adrpl){
+
+array_push($arr, array("type" => "admin","id" => $adrpl['adminid'], "name"=> $adrpl['aname'], "date"=> $adrpl['adate'], "time"=> $adrpl['atime'], "text"=> $adrpl['atext']));
+  }
+
     }
+
+   
+    
+
+    // var_dump($arr); die;
+ //array_push($arr['table'], array("id"=> $adrply['adminid'], "name"=> $ucomment['aname'], "date"=> $adrply['adate'], "time"=> $adrply['atime'], "text"=> $adrply['atext']));
+
+// if($sessioname != ""){
+// $sqlse= "SELECT *  FROM usercomment";
+// $stmtse = $conn->prepare($sqlw);
+// $stmtse->execute();
+// $resultse = $stmtse->setFetchMode(PDO::FETCH_ASSOC);
+// $admin = $stmtse->fetchAll();
+// }
+
+}catch(PDOException $e)
+{
+echo "Connection failed: " . $e->getMessage();
+}
 
 
 ?>
+
 <?php include 'navbar.php'; ?>
 
-    <section class="home-slider owl-carousel">
-
-
-	<?php foreach ($slider as $data) {
-		
-		echo '
-      <div class="slider-item">
-        <div class="container">
-          <div class="row d-flex slider-text justify-content-center align-items-center" data-scrollax-parent="true">
-						
-						<div class="img" style="background-image: url('.$data['sliderimage'].');"></div>
-
-            <div class="text d-flex align-items-center ftco-animate">
-				<div class="text-2 pb-lg-5 mb-lg-4 px-4 px-md-5">
-				
-		          	<h3 class="subheading mb-3">'.$data['scategory'].'</h3>
-		            <h1 class="mb-5">'.$data['shead'].'</h1>
-		            <p class="mb-md-5">'.$data['stext'].'</p>
-		           </div>
-            </div>
-
+ <?php foreach($headdata as $head) { 
+     echo '
+     <section class="hero-wrap hero-wrap-2" style="background-image: url('.$head['backimg'].');">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+          <div class="col-md-9 ftco-animate pb-5 text-center">
+            <h1 class="mb-3 bread">'.$head['head'].'</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Article Single<i class="ion-ios-arrow-forward"></i></span></p>
           </div>
         </div>
       </div>
+    </section>'; break;}?>
 
-          </div>
-        </div>
-      </div>'; }  ?>
-	</section>
-	
-	
-
-<?php	
-	if($search != ""){ 		
-	
-echo	'<section class="ftco-section ftco-no-pt">
-    	<div class="container">
-		<div class="row">
-		<div class="col-md-12">';
-
-	  
-		foreach ($user as $use) { echo'
-				  <div class="sidebar-wrap">
-					 <div class="sidebar-box p-4 ftco-animate">
-				   <form action="#" method="get" class="search-form">
-					 <div class="form-group">
-					   <span class="icon icon-search"></span>
-					   <input name="search" type="text" class="form-control" placeholder="Search" >
-					  </div>
-				   </form>
-				 </div>
-				 
-		   </div>
-			 </div>'; break;}
-	echo'	</div>
-		<div class="row">
-			<div class="col-lg-10">
-			
-        		<div class="row">
-		          <div class="col-md-12 heading-section ftco-animate">
-		            <h2 class="mb-4"><span>Serching</span></h2>
-		          </div>
-		        </div>
-        		<div class="row">';
-
-				foreach($searchbox as $se){		
-					echo '
-	
-					<div class="col-md-4 ftco-animate">
-					<div class="blog-entry">
-					<form method="post"> <a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'" class="img-2"><img src="'.$se['blogimg'].'" class="img-fluid" alt="Colorlib Template"></a>
-					</form>
-					<div class="text pt-3">
-					<p class="meta d-flex"><span class="pr-3">'.$se['blogcategory'].'</span><span class="ml-auto pl-3">'.$se['blog_date_time'].'</span></p>
-					<h3><form method="post"><a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'">'.$se['bloghead'].'</a></form></h3>
-					<p class="mb-0"><form method="post"><a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'" class="btn btn-black py-2">Read More <span class="icon-arrow_forward ml-4"></span></a></form></p>
-					</div>
-					</div>
-					</div>';} 	
-			
-						
-					
-    					
-					
-        	echo '	</div>
-        	</div>
-
-           </div>
-    	</div>
-    </section>'; } 	?>
-
-    <section class="ftco-section">
-    	<div class="container">
-    		<div class="row">
-          <div class="col-md-7 heading-section ftco-animate">
-            <h2 class="mb-4"><span>Recent Stories</span></h2>
-          </div>
-        </div>
-  	<div class="row">
-
-
-    			<div class="col-md-6 order-md-last col-lg-6 ftco-animate">
-			<?php
-		foreach ($blogers as $recent) {		echo ' 		<div class="blog-entry">
-    			<div class="img img-big d-flex align-items-end" style="background-image: url('.$recent['blogimg'].');">
-    						<div class="overlay"></div>
-    						<div class="text">
-    						<span class="subheading">'.$recent['blogcategory'].'</span> 
-							
-	<h3><a href="singleartical.php?blogid='.$recent['blogid'].'&amp;Blogauthor'.$recent['Blogauthor'].'">'.$recent['bloghead'].'</a></h3>
-							
-	<p class="mb-0"><a href="singleartical.php?blogid='.$recent['blogid'].'&amp;Blogauthor'.$recent['Blogauthor'].'" class="btn-custom">Read More <span class="icon-arrow_forward ml-4"></span></a></p>
-    						</div>
-	    				</div>
-    				</div> ' ; break;}  ?>
-    			</div>
-    			<div class="col-md-6">
-    				<div class="row">
-    					
-    					
-			<?php	foreach($blogs as $recent){		echo '
-    					<div class="col-md-6 ftco-animate">
-    						<div class="blog-entry">
-		    					<a href="singleartical.php?blogid='.$recent['blogid'].'&amp;Blogauthor='.$recent['Blogauthor'].'" class="img d-flex align-items-end" style="background-image: url('.$recent['blogimg'].');">
-		    						<div class="overlay"></div>
-			    				</a>
-			    				<div class="text pt-3">
-	    							<p class="meta d-flex"><span class="pr-3">'.$recent['blogcategory'].'</span><span class="ml-auto pl-3">'.$recent['blog_date_time'].'</span></p>
-	    							<h3><a href="singleartical.php?blogid='.$recent['blogid'].'&amp;Blogauthor='.$recent['Blogauthor'].'">'.$recent['bloghead'].'</a></h3>
-	    							<p class="mb-0"><a href="singleartical.php?blogid='.$recent['blogid'].'&amp;Blogauthor='.$recent['Blogauthor'].'" class="btn-custom">Read More <span class="icon-arrow_forward ml-4"></span></a></p>
-	    						</div>
-							</div>
-						</div>
-					';  }	?>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
-
-    <section class="ftco-section ftco-no-pt">
-    	<div class="container">
-        <div class="row">
-        	<div class="col-lg-9">
-        		<div class="row">
-		          <div class="col-md-12 heading-section ftco-animate">
-		            <h2 class="mb-4"><span>Featured Posts</span></h2>
-		          </div>
-		        </div>
-        		<div class="row">
-
-				<?php
-			
-foreach($feature as $fea){		echo '
-
-	<div class="col-md-4 ftco-animate">
-	<div class="blog-entry">
-	<form method="post"> <a href="singleartical.php?blogid='.$fea['blogid'].'&amp;Blogauthor='.$fea['Blogauthor'].'" class="img-2"><img src="'.$fea['blogimg'].'" class="img-fluid" alt="Colorlib Template"></a>
-	</form>
-	<div class="text pt-3">
-	<p class="meta d-flex"><span class="pr-3">'.$fea['blogcategory'].'</span><span class="ml-auto pl-3">'.$fea['blog_date_time'].'</span></p>
-	<h3><form method="post"><a href="singleartical.php?blogid='.$fea['blogid'].'&amp;Blogauthor='.$fea['Blogauthor'].'">'.$fea['bloghead'].'</a></form></h3>
-	<p class="mb-0"><form method="post"><a href="singleartical.php?blogid='.$fea['blogid'].'&amp;Blogauthor='.$fea['Blogauthor'].'" class="btn btn-black py-2">Read More <span class="icon-arrow_forward ml-4"></span></a></form></p>
-	</div>
-	</div>
-	</div>';} 	?>
-    					
-					
-        		</div>
-        	</div>
-
-      
-	 	<div class="col-lg-3">
-     
-		
-	 	 		<div class="sidebar-wrap">
- <?php	  if($edname != "") {
-	  echo'      		<div class="sidebar-box p-4 about text-center ftco-animate">
-			          <h2 class="heading mb-4">About Me</h2>
-			          <img src="'.$edimg.'" class="img-fluid" alt="Colorlib Template">
-			          <div class="text pt-4">
-			          	<p>Hi! My name is <strong>'.$edname.'</strong> '.$edabout.'</p>
-			          </div>
-	        		</div>'; } ?>
-	        		<div class="sidebar-box p-4 ftco-animate">
-	              <form action="#" method="get" class="search-form">
-					<div class="form-group">
-					  <span class="icon icon-search"></span>
-					  <input name="search" type="text" class="form-control" placeholder="Search" >
-					 </div>
-	              </form>
-				</div>
-				
-				
-            </div>
-        	</div>
-		</div>
-		</div>
-    </section>
-<?php foreach ($message as $msg) {
-echo '
-    <section class="ftco-section ftco-no-pt ftco-section-about ftco-no-pb bg-darken">
-    	<div class="container-fluid">
-    		<div class="row">
-					<div class="col-sm-6 col-md-6 col-lg-9 order-md-last img py-5" style="background-image: url('.$msg['back_img'].');"></div>
-
-	        <div class="col-sm-6 col-md-6 col-lg-3 py-4 text d-flex align-items-center ftco-animate">
-	        	<div class="text-2 py-5 px-4">
-	            <h1 class="mb-3">'.$msg['head'].'</h1>
-	            <p class="mb-md-5">'.$msg['messages'].'</p>
-	            <span class="signature">'.$msg['writer_name'].'</span>
-	          </div>
-	        </div>
-    		</div>
-    	</div>
-	</section>
-	'; break;}?>
-
-    <section class="ftco-section">
-    	<div class="container">
-        <div class="row">
-        	<div class="col-md-9">
-        		<div class="row">
-		          <div class="col-md-12 heading-section ftco-animate">
-		            <h2 class="mb-4"><span>Holiday Seasons Recipes</span></h2>
-		          </div>
-		        </div>
-        		<div class="row">
-					<?php foreach ($holiday as $ho) {
-					echo '
-        			<div class="col-md-6 col-lg-6 ftco-animate">
-		    				<div class="blog-entry">
-		    					<div class="img img-big img-big-2 d-flex align-items-end" style="background-image: url('.$ho['blogimg'].');">
-		    						<div class="overlay"></div>
-		    						<div class="text">
-		    							<span class="subheading">'.$ho['blogcategory'].'</span>
-		    							<h3><a href="singleartical.php?blogid='.$ho['blogid'].'&amp;Blogauthor='.$recent['Blogauthor'].'">'.$ho['bloghead'].'</a></h3>
-		    							<p class="mb-0"><a href="singleartical.php?blogid='.$ho['blogid'].'&amp;Blogauthor='.$recent['Blogauthor'].'" class="btn-custom">Read More <span class="icon-arrow_forward ml-4"></span></a></p>
-		    						</div>
-			    				</div>
-		    				</div>
-		    			</div>
-		    			 ';} ?>
-        		</div>
-        	</div>
-        	<div class="col-md-3">
-        		<div class="sidebar-wrap pt-4">
-	            <div class="sidebar-box categories text-center ftco-animate">
-				<?php foreach ($cat as $ca ) { echo '	          <h2 class="heading mb-4">'.$ca['head'].'</h2> ';} ?>
-			          <ul class="category-image">
-					  <?php foreach ($categ as $c ) {    echo'       	<li>
-			<a href="'.$c['pagelink'].'" class="img d-flex align-items-center justify-content-center text-center" style="background-image: url('.$c['cate_img'].');">
-			          			<div class="text">
-			          				<h3>'.$c['categories_name'].'</h3>
-			          			</div>
-			          		</a> 
-						  </li>
-					  ';} ?>
-			          	
-			          
-			          </ul>
-	        		</div>
-            </div>
-        	</div>
-        </div>
-    	</div>
-    </section>
-   	
     
-    <section class="ftco-counter ftco-section ftco-no-pt ftco-no-pb img" id="section-counter">
-    	<div class="container">
-    	<?php foreach($about as $abt){ echo '	<div class="row d-flex">
-    			<div class="col-md-6 d-flex">
-    				<div class="img d-flex align-self-stretch" style="background-image:url('.$abt['abtimage'].');"></div>
-    			</div>
-    			<div class="col-md-6 pl-md-5 py-5">
-    				<div class="row justify-content-start pb-3">
-		          <div class="col-md-12 heading-section ftco-animate">
-		            <h2 class="mb-4">'.$abt['abthead'].'</h2>
-		            <p>'.$abt['abttxt'].'</p>
-		          </div>
-				</div>
-				'; } ?>
-		    		<div class="row">
-		      <?php echo '    <div class="col-md-6 justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center py-5 bg-light mb-4">
-		              <div class="text">
-		                <strong class="number" data-number='.count($blogers).'>0</strong> 
-		                <span>Total number of Blogs</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center py-5 bg-light mb-4">
-		              <div class="text">
-		                <strong class="number" data-number='.count($countfea).'>0</strong>
-		                <span>Feature</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center py-5 bg-light mb-4">
-		              <div class="text">
-		                <strong class="number" data-number='.count($countholi).'>0</strong>
-		                <span>Holiday sessons</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center py-5 bg-light mb-4">
-		              <div class="text">
-		                <strong class="number" data-number='.$_SESSION['index'].'>0</strong>
-		                <span>Visitor Customers</span>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-	        </div>'; ?>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
+       
+           <div class="col-lg-8 order-lg-last ftco-animate">
+           <?php 
+    foreach($blogers as $blog){   echo'  <h2 class="mb-3">'.$blog['bloghead'].'</h2>
+            <img src="'.$blog['blogimg'].'" alt="" class="img-fluid"> <br/><br/>
+          <p>'.$blog['blogpara'].'  </p>
+           ';}?>
+         
+            
+      <?php foreach ($user as $us) { echo'
+          <div class="about-author d-flex p-4 bg-light">
+              <div class="bio mr-5">
+                <img src="'.$us['userimage'].'" alt="Image placeholder" width="auto" height="100">
+              </div>
+              <div class="desc">
+                <h3>'.$us['username'].'</h3>
+                <p>'.$us['userabout'].'</p>
+
+              </div>
+            </div>
+      ';} ?>
+
+             
+    <div class="pt-5 mt-5">
+              <h3 class="mb-5">COMMENTS</h3>
+                       
+        <ul class="comment-list">
+  <?php
+        foreach ($arr as $ar) {  
+          if($ar['ctype'] == "comment"){
+ echo'           <li class="comment">
+                 <div class="comment-body">
+                  <h3>'.$ar['name'].'</h3>
+                  <div class="meta">'.$ar['date'].' at '.$ar['time'].'</div>
+                  <p>'.$ar['text'].'</p>
+                  <p><a href="#" class="reply">Reply</a></p>
+          </div>
+                </li>
+                ';
+                if($edname !=""){ echo'
+                <li class="comment">
+                <div class="comment-body">
+              <form method="post">
+                <input type="text" name="text" > 
+                <input type="hidden" name="ide" value="'.$ar['id'].'">
+                <button class="reply btn btn-primary" name="admin">Reply</button>
+              </form>
+               </div>
+               
+            </li>
+                ';} }
+
+elseif ($ar['type'] == "admin") {
+                echo'           <ul class="children">
+                    <li class="comment">
+                      
+                      <div class="comment-body">
+                        <h3>'.$ar['name'].'</h3>
+                        <div class="meta">'.$ar['date'].' at '.$asr['time'].'</div>
+                        <p>'.$ar['text'].'</p>
+                        <p><a href="#" class="reply">Reply</a></p>
+                      </div>
+
+                   </li>
+                  </ul> ' ;} 
+               }?>
+              </ul>
+
+              
+                     <!-- <ul class="comment-list">
+       
+              <ul class="children">
+               <li class="comment">
+                
+                 <div class="comment-body">
+                 <h3>'.$ar['name'].'</h3>
+                 <div class="meta">'.$ar['date'].' at '.$ar['time'].'</div>
+                 <p>'.$ar['text'].'</p>
+                 <p><a href="#" class="reply">Reply</a></p>
+               ';   -->
+             
+              <!-- END comment-list -->
+              <?php if($edname == ""){ echo '
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Leave a message</h3>
+                <form action="#" method="post" class="p-5 bg-light">
+                  <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" name="name" class="form-control" value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" name="email" class="form-control" id="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="url" name="web"  class="form-control" id="website">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea  name="mesage" cols="30" rows="10" class="form-control"></textarea>
+                  </div>
+                  <div class="form-group">
+                  ';
+      echo
+      '            <button name="message" class="btn py-3 px-4 btn-primary">Post Comment </button>
+      
+                  </div>
+
+                </form>
+              </div>
+            </div> ' ; }else{
+
+       echo'       <div class="comment-form-wrap pt-5">
+       
+       
+     </div>
+   </div> ';
+            }
+ ?>
+          </div> <!-- .col-md-8 -->
+          <div class="col-lg-4 sidebar pr-lg-5 ftco-animate">
+            <div class="sidebar-box">
+              <form action="#" method="post" class="search-form">
+                <div class="form-group">
+                  <span class="icon icon-search"></span>
+                  <input type="text" name="search" class="form-control" placeholder="Type a keyword and hit enter">
+                </div>
+              </form>
+            </div>
+         <?php 
+          if($search != ""){   echo' <div class="sidebar-box ftco-animate">
+              <h3 class="heading mb-4">Searching</h3>';
+           
+            foreach($searchbox as $se){	
+echo ' 
+           
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url('.$se['blogimg'].');"></a>
+                <div class="text">
+                  <h3><a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'">'.$se['blogpara'].'</a></h3>
+                  <div class="meta">
+                    <div><a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'"><span class="icon-calendar"></span> '.$se['blog_date_time'].'</a></div>
+                    <div><a href="singleartical.php?blogid='.$se['blogid'].'&amp;Blogauthor='.$se['Blogauthor'].'"><span class="icon-person"></span>'.$se['Blogauthor'].'</a></div>
+                  </div>
+                </div>
+              </div>';  }  }
+else{
+      
+      echo'      <div class="sidebar-box ftco-animate">
+              <ul class="categories">';
+              foreach ($cat as $ca ) { echo '	          <h2 class="heading mb-4">'.$ca['head'].'</h2> ';} 
+             foreach ($categ as $c ) {    echo'   <li><a href="'.$c['pagelink'].'">'.$c['categories_name'].' </a></li> ';}
+
+           echo'   </ul>
+            </div>
+
+            <div class="sidebar-box ftco-animate">
+              <h3 class="heading mb-4">Recent Blog</h3>';
+         foreach($bla as $b){
+echo ' 
+           
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url('.$b['blogimg'].');"></a>
+                <div class="text">
+                  <h3><a href="singleartical.php?blogid='.$b['blogid'].'&amp;Blogauthor='.$b['Blogauthor'].'">'.$b['blogpara'].'</a></h3>
+                  <div class="meta">
+                    <div><a href="singleartical.php?blogid='.$b['blogid'].'&amp;Blogauthor='.$b['Blogauthor'].'"><span class="icon-calendar"></span> '.$b['blog_date_time'].'</a></div>
+                    <div><a href="singleartical.php?blogid='.$b['blogid'].'&amp;Blogauthor='.$b['Blogauthor'].'"><span class="icon-person"></span>'.$b['Blogauthor'].'</a></div>
+                  </div>
+                </div>
+              </div>';  } }?>
+            
+
+            <!-- <div class="sidebar-box ftco-animate">
+              <h3 class="heading mb-4">Tag Cloud</h3>
+              <div class="tagcloud">
+                <a href="#" class="tag-cloud-link">dish</a>
+                <a href="#" class="tag-cloud-link">menu</a>
+                <a href="#" class="tag-cloud-link">food</a>
+                <a href="#" class="tag-cloud-link">sweet</a>
+                <a href="#" class="tag-cloud-link">tasty</a>
+                <a href="#" class="tag-cloud-link">delicious</a>
+                <a href="#" class="tag-cloud-link">desserts</a>
+                <a href="#" class="tag-cloud-link">drinks</a>
+              </div>
+            </div> -->
+
+           
+          </div>
+
         </div>
-    	</div>
-    </section>
+      </div>
+    </section> <!-- .section -->
+		
+	
 
-
-	<?php include 'footer.php'; ?>
-  
+    <?php include 'footer.php'; ?>
