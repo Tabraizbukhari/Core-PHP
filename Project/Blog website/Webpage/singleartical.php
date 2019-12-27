@@ -105,20 +105,21 @@ $conn->exec($sql);
 }
  
 if(isset($_POST['admin'])){
-
-  $n = $_POST['name'];
-  $e = $_POST['email'];
-  $mes = $_POST['text'];
-  date_timestamp_set("Asia/Karachi");
-  $date = date("y-m-d");
-  $time = date('h:i:sa');
-  
-  $sql= "INSERT INTO adminreply (aname,aemail,atext,adate, atime, blogid, userid) VALUES ('$n','$e','$mes','$date','$time','$articalid')";
-  $conn->exec($sql); 
-  
-  
-  }
-
+    
+  $id =$_POST['ide'];
+  $edname =   "Admin";
+   $eemail =$_SESSION['mail'];
+     $mes = $_POST['text'];
+     date_timestamp_set("Asia/Karachi");
+     $date = date("y-m-d");
+     $time = date('h:i:sa');
+     
+     $sql= "INSERT INTO adminreply (aname,aemail,atext,adate, atime, blogid, userid) VALUES ('$edname','$eemail','$mes','$date','$time','$articalid','$id')";
+     $conn->exec($sql); 
+     
+     
+     
+     }
 
 
 $sqlw= "SELECT *  FROM usercomment where blogid = $articalid";
@@ -133,12 +134,10 @@ $arr = array();
 
  foreach($ucomment as $coment){
  
-  array_push($arr, array("id"=> $coment['userid'], "name"=> $coment['uname'], "date"=> $coment['udate'], "time"=> $coment['utime'], "text"=> $coment['utext']));
+  array_push($arr, array("ctype" => "comment", "id"=> $coment['userid'], "name"=> $coment['uname'], "date"=> $coment['udate'], "time"=> $coment['utime'], "text"=> $coment['utext']));
 
     $id = $coment['userid'];
 
-    
- 
 $sqlar= "SELECT *  FROM adminreply where userid = $id ";
 $stmtar = $conn->prepare($sqlar);
 $stmtar->execute();
@@ -147,10 +146,13 @@ $adrply = $stmtar->fetchAll();
 
   foreach($adrply as $adrpl){
 
-array_push($arr, array("id" => $adrpl['adminid'], "name"=> $adrpl['aname'], "date"=> $adrpl['adate'], "time"=> $adrpl['atime'], "text"=> $adrpl['atext']));
+array_push($arr, array("type" => "admin","id" => $adrpl['adminid'], "name"=> $adrpl['aname'], "date"=> $adrpl['adate'], "time"=> $adrpl['atime'], "text"=> $adrpl['atext']));
   }
 
     }
+
+   
+    
 
     // var_dump($arr); die;
  //array_push($arr['table'], array("id"=> $adrply['adminid'], "name"=> $ucomment['aname'], "date"=> $adrply['adate'], "time"=> $adrply['atime'], "text"=> $adrply['atext']));
@@ -208,26 +210,70 @@ echo "Connection failed: " . $e->getMessage();
               <div class="desc">
                 <h3>'.$us['username'].'</h3>
                 <p>'.$us['userabout'].'</p>
+
               </div>
             </div>
       ';} ?>
 
-            <div class="pt-5 mt-5">
-              <h3 class="mb-5"> COMMENTS</h3>
-           <ul class="comment-list">
-       
-           <?php foreach ($arr as $ar) {
-           echo'  <li class="comment">
-         
-              <div class="comment-body">
-                    <h3>'.$ar['name'].'</h3>
-                    <div class="meta">'.$ar['date'].' at '.$ar['time'].'</div>
-                    <p>'.$ar['text'].'</p>
-                  
-                  </div>
+             
+    <div class="pt-5 mt-5">
+              <h3 class="mb-5">COMMENTS</h3>
+                       
+        <ul class="comment-list">
+  <?php
+        foreach ($arr as $ar) {  
+          if($ar['ctype'] == "comment"){
+ echo'           <li class="comment">
+                 <div class="comment-body">
+                  <h3>'.$ar['name'].'</h3>
+                  <div class="meta">'.$ar['date'].' at '.$ar['time'].'</div>
+                  <p>'.$ar['text'].'</p>
+                  <p><a href="#" class="reply">Reply</a></p>
+          </div>
                 </li>
- ';}
-  ?>
+                ';
+                if($edname !=""){ echo'
+                <li class="comment">
+                <div class="comment-body">
+              <form method="post">
+                <input type="text" name="text" > 
+                <input type="hidden" name="ide" value="'.$ar['id'].'">
+                <button class="reply btn btn-primary" name="admin">Reply</button>
+              </form>
+               </div>
+               
+            </li>
+                ';} }
+
+elseif ($ar['type'] == "admin") {
+                echo'           <ul class="children">
+                    <li class="comment">
+                      
+                      <div class="comment-body">
+                        <h3>'.$ar['name'].'</h3>
+                        <div class="meta">'.$ar['date'].' at '.$asr['time'].'</div>
+                        <p>'.$ar['text'].'</p>
+                        <p><a href="#" class="reply">Reply</a></p>
+                      </div>
+
+                   </li>
+                  </ul> ' ;} 
+               }?>
+              </ul>
+
+              
+                     <!-- <ul class="comment-list">
+       
+              <ul class="children">
+               <li class="comment">
+                
+                 <div class="comment-body">
+                 <h3>'.$ar['name'].'</h3>
+                 <div class="meta">'.$ar['date'].' at '.$ar['time'].'</div>
+                 <p>'.$ar['text'].'</p>
+                 <p><a href="#" class="reply">Reply</a></p>
+               ';   -->
+             
               <!-- END comment-list -->
               <?php if($edname == ""){ echo '
               <div class="comment-form-wrap pt-5">
@@ -251,8 +297,9 @@ echo "Connection failed: " . $e->getMessage();
                     <textarea  name="mesage" cols="30" rows="10" class="form-control"></textarea>
                   </div>
                   <div class="form-group">
-                  
-                  <button name="message" class="btn py-3 px-4 btn-primary">Post Comment </button>
+                  ';
+      echo
+      '            <button name="message" class="btn py-3 px-4 btn-primary">Post Comment </button>
       
                   </div>
 
@@ -261,29 +308,8 @@ echo "Connection failed: " . $e->getMessage();
             </div> ' ; }else{
 
        echo'       <div class="comment-form-wrap pt-5">
-       <h3 class="mb-5">Admin</h3>
-       <form action="#" method="post" class="p-5 bg-light">
-         <div class="form-group">
-           <label for="name">Name *</label>
-           <input type="text" name="name" readonly class="form-control" value="Admin">
-         </div>
-         <div class="form-group">
-           <label for="email">Email *</label>
-           <input type="email" name="email" readonly class="form-control" value="'.$eemail.'" id="email">
-         </div>
-        
-
-         <div class="form-group">
-           <label for="message">Message</label>
-           <textarea  name="text" cols="30" rows="10" class="form-control"></textarea>
-         </div>
-         <div class="form-group">
-         
-         <button name="admin" class="btn py-3 px-4 btn-primary">Post Comment </button>
-
-         </div>
-
-       </form>
+       
+       
      </div>
    </div> ';
             }
