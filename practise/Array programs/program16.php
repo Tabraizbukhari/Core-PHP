@@ -1,5 +1,5 @@
 <?php 
-// smallest and largest
+// smallest 
 include 'count.php';
 
 function largest($arr) 
