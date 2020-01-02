@@ -17,5 +17,6 @@ $count= 0;
 }
 $sum = 6;
 $arr = array(5,1,4,2);
-echo sumarr($arr, $sum);
+
+echo "&nbsp;".sumarr($arr, $sum)." &nbsp; pairs of elements whose sum is &nbsp;".$sum;
 ?>
