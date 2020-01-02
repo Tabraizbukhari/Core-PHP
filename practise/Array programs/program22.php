@@ -1,6 +1,7 @@
 <?php
 include 'count.php';
 
+
 function com($a, $b, $c){
 
     echo '</br> </br> THE COMMON VALUES ARE &nbsp; &nbsp;';
@@ -9,17 +10,25 @@ function com($a, $b, $c){
         for ($y=0; $y<counting($c) ; $y++) { 
            if($a[$i]==$b[$x]){
              if($b[$x]== $c[$y]){
-                echo $a[$i] . ", &nbsp;";
+             {   if($a[$y] < $a[$y-1]) 
+                       { 
+                           $tmp = $a[$y];
+                           $a[$y] = $a[$y-1];
+                           $a[$y-1] = $tmp ;      
+                        }
+                              echo $a[$i]. ", &nbsp;";
+                    }
+                }      
              }
             }
            }
         }
        }
         
-}
-$a = array('a','b','c','d','e','f','g','h','q','r');
-$b = array('a','e','o','u','g','h','r','q');
-$c = array('o','e','a','q');
+
+$a = array('a','b','o','d','e','f','g','h','q','r');
+$b = array('a','e','u','g','h','r','q');
+$c = array('o','e','a','q','h');
 
 echo" ARRAY 1 &nbsp; &nbsp;</br>";
 for ($w=0; $w <counting($a); $w++) { 
@@ -39,3 +48,5 @@ for ($l=0; $l <counting($c); $l++) {
 com($a, $b, $c);
 
 ?>
+
+
