@@ -1,0 +1,486 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jan 18, 2020 at 12:40 PM
+-- Server version: 10.4.8-MariaDB
+-- PHP Version: 7.1.33
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `mine`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `about`
+--
+
+CREATE TABLE `about` (
+  `abt_id` int(11) UNSIGNED NOT NULL,
+  `abt_tag` varchar(200) DEFAULT NULL,
+  `abt_head` varchar(500) DEFAULT NULL,
+  `abt_content` varchar(1000) DEFAULT NULL,
+  `abt_img` varchar(1000) DEFAULT NULL,
+  `abt_img_title` varchar(100) DEFAULT NULL,
+  `abt_date` varchar(220) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `about`
+--
+
+INSERT INTO `about` (`abt_id`, `abt_tag`, `abt_head`, `abt_content`, `abt_img`, `abt_img_title`, `abt_date`) VALUES
+(4, 'lifetime', 'About us', '<p>The more frequent and better your blog posts are, the higher the chances for your website to get discovered and visited by your target audience. Which means, a blog is an effective lead generation tool. Add a great call to action (CTA), and it will convert your website traffic into high-quality leads. But a blog also allows you to showcase your authority and build a brand.</p><h3>OUR BRAND</h3>', '../web/img/1.jpg', 'My 1st post', '17/Jan/2020');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `blog`
+--
+
+CREATE TABLE `blog` (
+  `blog_id` int(11) UNSIGNED NOT NULL,
+  `post_user_id` int(220) NOT NULL,
+  `category_id` varchar(2000) NOT NULL,
+  `head` varchar(60) NOT NULL,
+  `tags` varchar(60) NOT NULL,
+  `blog_img` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `content` mediumtext NOT NULL,
+  `author_name` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `author_img` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `author_msg` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  `comment_count` int(11) NOT NULL,
+  `views_count` int(11) NOT NULL,
+  `post_status` varchar(200) CHARACTER SET utf8 NOT NULL,
+  `blog_date` varchar(70) DEFAULT NULL,
+  `post_type` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `feature_img` varchar(1000) CHARACTER SET utf8 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `blog`
+--
+
+INSERT INTO `blog` (`blog_id`, `post_user_id`, `category_id`, `head`, `tags`, `blog_img`, `content`, `author_name`, `author_img`, `author_msg`, `comment_count`, `views_count`, `post_status`, `blog_date`, `post_type`, `feature_img`) VALUES
+(34, 0, 'java', 'My 1st post', 'lifetime blogger', '../web/img/b3.jpg', '<h2>MY 1st Artical</h2><p>The ability to understand natural language queries is a big deal. You can ask, for example: “I’m going to be in Boston. I like basketball. What do you suggest, Watson?” You might get several answers: Celtics tickets,&nbsp;Boston College&nbsp;tickets, Harvard tickets. Or in the offseason, Watson may suggest you drive to the Basketball Hall of Fame in Springfield (MA). Companies are already using Watson this way. Fluid, Inc.’s Watson-based retail solutions deliver granular results to queries such as “I am taking my wife and three children</p><h3>Say thank you:</h3><p>Celtics tickets,&nbsp;Boston College&nbsp;tickets, Harvard tickets. Or in the offseason, Watson may suggest you drive to the Basketball Hall of Fame in Springfield (MA). Companies are already using Watson this way. Fluid, Inc.’s Watson-based retail solutions deliver granular results to queries such as “I am taking my wife and three children</p>', 'Tabraiz', '../web/img/b7.jpg', 'Since Watson is built to understand the nuance of natural language, this new service allows researchers to process million', -1, 55, 'published', '17/Jan/2020', '', '../web/img/bg.jpg'),
+(35, 0, 'bootstrap', 'my 2nd post', 'technology', '../web/img/7.jpg', '<h2><strong>6 Technology Articles You Must Read Today</strong></h2><p>The ability to understand natural language queries is a big deal. You can ask, for example: “I’m going to be in Boston. I like basketball. What do you suggest, Watson?” You might get several answers: Celtics tickets,&nbsp;Boston College&nbsp;tickets, Harvard tickets. Or in the offseason, Watson may suggest you drive to the Basketball Hall of Fame in Springfield (MA). Companies are already using Watson this way. Fluid, Inc.’s Watson-based retail solutions deliver granular results to queries such as “I am taking my wife and three children</p><p>Wallace describes how each city is turning itself into a data treasure trove and using new technologies. Let’s look at a few:</p><h4>Turning old phone booths into WiFi hot spots (NYC);</h4><ul><li>All household waste is sucked directly from individual kitchens through a vast underground network of tunnels, to waste processing centers, where it is automatically sorted, deodorized and treated. (Songdo, South Korea);</li><li>Wi-Fi provides city communities with hot spots that promote city services such as water meters, leak sensors, parking meter and other city services to operate on the same secure government network. (Dallas); and</li><li>There are no light switches or water taps in the city; movement sensors control lighting and water to cut electricity and water consumption by 51 and 55% respectively. (Masdar, UAE).</li></ul>', 'Tabraiz', '../web/img/images.jpg', 'With Big Data and big data analytics, the need for analytics and more customized type solutions is experiencing exponential growth. Methods and approaches in employing', -1, 52, 'published', '17/Jan/2020', '', '../web/img/7.jpg'),
+(36, 0, 'java', 'Blogger blogs', 'myblogs', '../web/img/5.png', '<h2><strong>What is a Blog?</strong></h2><h3>Definition of blog</h3><p>A blog (shortening of “weblog”) is an online journal or informational website displaying information in the reverse chronological order, with the latest posts appearing first. It is a platform where a writer or even a group of writers share their views on an individual subject.</p><p>When you use your niche knowledge for creating informative and engaging posts, it builds trust with your audience. Great blogging makes your business looks more credible, which is especially important if your brand is still young and fairly unknown. It ensures presence and authority at the same time.</p><h3>Blog structure</h3><p>The appearance of blogs changed over time, and nowadays blogs include different items. But, most blogs include some standard features and structure. Here are common features that a typical blog will include:</p><ul><li>Header with the menu or navigation bar</li><li>Main content area with highlighted or latest blog posts</li><li>Sidebar with social profiles, favorite content, or call-to-action</li><li>Footer with relevant links like a disclaimer, privacy policy, contact page, etc.</li></ul>', 'Tabraiz', '../web/img/6.png', '', -1, 1, 'draft', '17/Jan/2020', '', '../web/img/7.jpg'),
+(37, 0, 'bootstrap', 'check imgs', 'lifetime', '../web/img/1.png', '<h3>BEST FOOD</h3><p>my best food</p>', 'Tabraiz', '../web/img/7.jpg', 'my bootstrap', 0, 53, 'published', '17/Jan/2020', '', '../web/img/1.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+  `cat_id` int(11) UNSIGNED NOT NULL,
+  `cat_name` varchar(200) DEFAULT NULL,
+  `cat_link` varchar(500) DEFAULT NULL,
+  `cat_img` varchar(1000) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`cat_id`, `cat_name`, `cat_link`, `cat_img`) VALUES
+(34, 'bootstrap', NULL, NULL),
+(36, 'java', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comment`
+--
+
+CREATE TABLE `comment` (
+  `comment_id` int(11) UNSIGNED NOT NULL,
+  `comment_post_id` int(100) UNSIGNED DEFAULT NULL,
+  `admin_id` int(11) NOT NULL,
+  `comment_name` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `comment_email` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `comment_content` varchar(1000) CHARACTER SET utf8 DEFAULT NULL,
+  `comment_subject` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `comment_status` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `comment_date` varchar(200) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact`
+--
+
+CREATE TABLE `contact` (
+  `id` int(11) NOT NULL,
+  `c_name` varchar(220) NOT NULL,
+  `email` varchar(220) NOT NULL,
+  `c_subject` varchar(220) NOT NULL,
+  `msg` longtext NOT NULL,
+  `c_date` varchar(220) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `contact`
+--
+
+INSERT INTO `contact` (`id`, `c_name`, `email`, `c_subject`, `msg`, `c_date`) VALUES
+(3, 'david', 'david@gmail.com', 'deve', 'i am david ', '17-Jan-2020 - 13.01.08pm'),
+(4, 'tabraiz', 'm.tabraizbukhari@gmail.com', 'subject', 'sdd', '18-Jan-2020 - 00.01.33am'),
+(5, 'tabraiz', 'm.tabraizbukhari@gmail.com', 'my subject blogerpedia', 'sddd', '18-Jan-2020 - 00.01.04am'),
+(6, 'tabraiz bukhari', 'unknown@gmail.com', 'my subject blogerpedia', 'sddd', '18-Jan-2020 - 00.01.02am'),
+(7, 'tabraiz', 'm.tabraizbukhari@gmail.com', 'subject', 'dsdd', '18-Jan-2020 - 01.01.27am');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `latest_post`
+--
+
+CREATE TABLE `latest_post` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `head` varchar(200) DEFAULT NULL,
+  `img` varchar(1000) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `latest_post`
+--
+
+INSERT INTO `latest_post` (`id`, `head`, `img`) VALUES
+(1, 'latest posts', 'img/blog-img/2.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `navbar`
+--
+
+CREATE TABLE `navbar` (
+  `nav_id` int(11) UNSIGNED NOT NULL,
+  `nav_name` varchar(200) DEFAULT NULL,
+  `nav_link` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter`
+--
+
+CREATE TABLE `newsletter` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `subscriber` varchar(400) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reply`
+--
+
+CREATE TABLE `reply` (
+  `id` int(11) NOT NULL,
+  `admin_id` int(200) NOT NULL,
+  `text_reply` varchar(2000) NOT NULL,
+  `post_id` int(10) UNSIGNED NOT NULL,
+  `comment_id` int(10) UNSIGNED NOT NULL,
+  `reply_date` varchar(220) NOT NULL,
+  `admin_name` varchar(220) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reply`
+--
+
+INSERT INTO `reply` (`id`, `admin_id`, `text_reply`, `post_id`, `comment_id`, `reply_date`, `admin_name`) VALUES
+(34, 16, 'not ever budy', 35, 29, '20-01-17', 'ahmeraa'),
+(37, 15, 'what can you do?', 36, 30, '20-01-17', 'Tabraiz&nbsp;Bukhari'),
+(38, 15, 'how you make it', 36, 31, '20-01-17', 'Tabraiz&nbsp;Bukhari');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sidebar_ads`
+--
+
+CREATE TABLE `sidebar_ads` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `head` varchar(200) DEFAULT NULL,
+  `img` varchar(1000) CHARACTER SET utf8 DEFAULT NULL,
+  `img_link` varchar(1000) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sidebar_ads`
+--
+
+INSERT INTO `sidebar_ads` (`id`, `head`, `img`, `img_link`) VALUES
+(1, 'ADVERTISMENT ', 'img/bg-img/add.gif', 'http://localhost/bloger/web/index.php');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_img` varchar(500) NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `user_first_name` varchar(500) NOT NULL,
+  `user_last_name` varchar(500) NOT NULL,
+  `user_age` varchar(200) NOT NULL,
+  `user_gender` varchar(220) NOT NULL,
+  `user_email` varchar(500) NOT NULL,
+  `user_password` varchar(1999) NOT NULL,
+  `user_role` varchar(500) NOT NULL,
+  `randsalt` varchar(220) NOT NULL,
+  `user_status` varchar(220) NOT NULL,
+  `user_date` varchar(220) NOT NULL,
+  `city` varchar(220) NOT NULL,
+  `user_address` varchar(220) NOT NULL,
+  `user_bio` varchar(2000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_img`, `user_id`, `user_first_name`, `user_last_name`, `user_age`, `user_gender`, `user_email`, `user_password`, `user_role`, `randsalt`, `user_status`, `user_date`, `city`, `user_address`, `user_bio`) VALUES
+('../admin/img/user/images.jpg', 15, 'Tabraiz', 'Bukhari', '2020-01-28', 'male', 'm.tabraizbukhari@gmail.com', '2se7/DWV9z4X6', 'admin', '2sdsfaerdvhsfsdasheyyw', 'active', '16/Jan/2020', 'karachi', 'karachi city', ''),
+('../admin/img/images.jpg', 16, 'ahmer', 'aa', '2013-04-17', 'male', 'ahmer@gmail.com', '2se7/DWV9z4X6', 'blogposter', '2sdsfaerdvhsfsdasheyyw', 'active', '16/Jan/2020', 'karachi', 'ssd', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usersonline`
+--
+
+CREATE TABLE `usersonline` (
+  `id` int(11) NOT NULL,
+  `user_session` varchar(220) NOT NULL,
+  `user_time` varchar(220) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `usersonline`
+--
+
+INSERT INTO `usersonline` (`id`, `user_session`, `user_time`) VALUES
+(24, '2ohvigi8cbqi165ttt2m7ekvjg', '1579098638'),
+(25, 'e36g0pfi7h4gui7sd60u50fh8e', '1579098617'),
+(26, '6tddt2upttttprt41tiev9k222', '1579180486'),
+(27, '1golgmgkqbb6984jecun41cbj4', '1579160423'),
+(28, 'vt62niboccuj9f4ni5ho1m7gb2', '1579160635'),
+(29, 'dge5a47grn6iidnkut65rd3pn3', '1579160918'),
+(30, 'jt5jn3bb8lbllqmpekjigf60sr', '1579168700'),
+(31, '204mgos9madk2or33ekv35hqem', '1579165419'),
+(32, 'lm2avbhgrb8cp6bmngsbp4ojfp', '1579183208'),
+(33, 'oanfpoocp6th21drnsbhet3iug', '1579249797'),
+(34, 'du9ntpbko4pgqkjvh18h829ida', '1579212411'),
+(35, 'ptgqu62b6alea69i36iaq4t1ad', '1579269804'),
+(36, 'rd2o49rb8gfv2rpsqdo72f0jgt', '1579303021');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_role`
+--
+
+CREATE TABLE `user_role` (
+  `role_id` int(10) UNSIGNED NOT NULL,
+  `user_role` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_role`
+--
+
+INSERT INTO `user_role` (`role_id`, `user_role`) VALUES
+(1, 'admin'),
+(2, 'subscriber');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `about`
+--
+ALTER TABLE `about`
+  ADD PRIMARY KEY (`abt_id`);
+
+--
+-- Indexes for table `blog`
+--
+ALTER TABLE `blog`
+  ADD PRIMARY KEY (`blog_id`);
+
+--
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`cat_id`);
+
+--
+-- Indexes for table `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`comment_id`),
+  ADD KEY `comment_post_id` (`comment_post_id`);
+
+--
+-- Indexes for table `contact`
+--
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `latest_post`
+--
+ALTER TABLE `latest_post`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `navbar`
+--
+ALTER TABLE `navbar`
+  ADD PRIMARY KEY (`nav_id`);
+
+--
+-- Indexes for table `newsletter`
+--
+ALTER TABLE `newsletter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `reply`
+--
+ALTER TABLE `reply`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comment_id` (`comment_id`);
+
+--
+-- Indexes for table `sidebar_ads`
+--
+ALTER TABLE `sidebar_ads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `usersonline`
+--
+ALTER TABLE `usersonline`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_role`
+--
+ALTER TABLE `user_role`
+  ADD PRIMARY KEY (`role_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `about`
+--
+ALTER TABLE `about`
+  MODIFY `abt_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `blog`
+--
+ALTER TABLE `blog`
+  MODIFY `blog_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `category`
+--
+ALTER TABLE `category`
+  MODIFY `cat_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `latest_post`
+--
+ALTER TABLE `latest_post`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `navbar`
+--
+ALTER TABLE `navbar`
+  MODIFY `nav_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `newsletter`
+--
+ALTER TABLE `newsletter`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `reply`
+--
+ALTER TABLE `reply`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `sidebar_ads`
+--
+ALTER TABLE `sidebar_ads`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `usersonline`
+--
+ALTER TABLE `usersonline`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `user_role`
+--
+ALTER TABLE `user_role`
+  MODIFY `role_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
