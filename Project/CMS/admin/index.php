@@ -1,7 +1,7 @@
 <?php include "include/header.php" ?>
 <?php include "include/navbar.php" ?>
 <?php 
- 
+
   // $session = session_id(); 
   // $time = time();
   // $time_out_in_sec = 10;
@@ -271,4 +271,50 @@ $number_of_user_unactive = $result->fetchColumn();
         chart.draw(data, options);
       }
     </script>
+
+
+
+<!-- var notify = pusher.subscriber('notification');
+	notify.bind('new_user',function('notification'){
+	var message = notification.message;
+	toastr.success('${message} just registered');
+    }); -->
     <?php include "include/footer.php" ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+<script type="text/javascript" src="https://js.pusher.com/5.0/pusher.min.js"></script>
+    
+<script>
+	$(document).ready(function(){
+    
+  var pusher = new Pusher('dc2b32aeb35c85a6b41f', {
+      cluster: 'ap3',
+      forceTLS: true
+    });
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      
+      var message = data.message;
+      toastr.success(message,'new registered');
+    });
+
+});
+</script>
+  <!-- <script>
+ ar notify = pusher.subscriber('my-channel');
+	notify.bind('new_user',function(notification){
+	var message = notification.message;
+	toastr.success('${message} just registered');
+    });
+    var pusher = new Pusher('dc2b32aeb35c85a6b41f', {
+      cluster: 'ap3',
+      forceTLS: true
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+  </script> -->
+
