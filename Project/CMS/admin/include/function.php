@@ -509,8 +509,24 @@ foreach ($user as $bs ) {
 
 function adduser(){
   global $conn;
+
+
+ $options = array(
+      'cluster' => 'ap3',
+      'useTLS' => true
+    );
+    $pusher = new Pusher\Pusher(
+      'dc2b32aeb35c85a6b41f',
+      '753a6d5719210238ca33',
+      '935556',
+      $options
+    );
+  
   if(isset($_POST['adduser'])){
       
+   
+    
+
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $age = $_POST['age'];
@@ -528,12 +544,21 @@ function adduser(){
     $userimg  = $_FILES['userimg']['tmp_name'];
      $compass = $_POST['compass'];
 
-    // $slat = "2sdsfaerdvhsfsdasheyyw";
+    $slat = "2sdsfaerdvhsfsdasheyyw";
     // $pass = crypt($pass, $slat);
 
-    $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost'=> 10));
-  $compass = password_hash($compass, PASSWORD_BCRYPT, array('cost'=> 10));
+  //   $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost'=> 10));
+  // $compass = password_hash($compass, PASSWORD_BCRYPT, array('cost'=> 10));
 
+
+      $stmt = $conn->prepare("SELECT * FROM users WHERE user_email='$email' ");
+      $stmt->execute();
+      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+      $user = $stmt->fetch(); 
+ 
+      if(isset($user['email'])){
+        echo "exist";
+      }else{
    
         if($pass != $compass){
           echo "passwords doesn't match";
@@ -551,13 +576,17 @@ user_role,user_status,user_date,city,user_address,user_img,randsalt) VALUES ('$f
 '$role','$status','$date','$city','$address','$user_tar','$slat')
  ";
   $conn ->exec($sql);
-    
+ 
+ 
+    $data['message'] =$fname.''.$lname;
+    $pusher->trigger('my-channel', 'my-event', $data);
 }
 
 }
-
+  }
 if(isset($_POST['create'])){
       
+  
   $fname = $_POST['fname'];
   $lname = $_POST['lname'];
   $age = $_POST['age'];
@@ -570,14 +599,23 @@ if(isset($_POST['create'])){
   $date = date("d/M/Y");
   $status = "unactive";
  $compass = $_POST['compass'];
-  // $slat = "2sdsfaerdvhsfsdasheyyw";
+  $slat = "2sdsfaerdvhsfsdasheyyw";
   // $pass = crypt($pass, $slat);
 
-  $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost'=> 2));
-  $compass = password_hash($compass, PASSWORD_BCRYPT, array('cost'=> 2));
-  echo $pass. "</br>";
-  echo $compass;
- 
+  // $pass = password_hash($pass, PASSWORD_BCRYPT, array('cost'=> 12));
+  // $compass = password_hash($compass, PASSWORD_BCRYPT, array('cost'=> 12));
+  // echo $pass. "</br>";
+  // echo $compass;
+
+            $stmt = $conn->prepare("SELECT * FROM users WHERE user_email='$email' ");
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch(); 
+
+  if($user['user_email'] == $email){
+    return $msg =  "user email already exist try another";
+  }else{
+   
       if($pass != $compass){
         echo "passwords doesn't match";
       }else{
@@ -590,9 +628,11 @@ $sql = "INSERT INTO users (user_first_name,user_last_name,user_age,user_gender,u
 user_password,user_status,user_date,city,user_address,user_img,randsalt) VALUES ('$fname','$lname','$age','$gender','$email','$pass','$status','$date','$city','$address','$target_dir','$slat')
 ";
 $conn ->exec($sql);
-  
+$data['message'] =$fname.''.$lname;
+$pusher->trigger('my-channel', 'my-event', $data);
 }
 
+}
 }
 }
 
@@ -930,8 +970,39 @@ foreach ($about as $bs ) {
 
       }
 
-
+// function is_admin($userrole = ""){
+//   global $conn;
     
+// $stmt = $conn->prepare("SELECT * FROM users WHERE user_role ='$userrole' ");
+// $stmt->execute();
+// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+// $user = $stmt->fetchAll(); 
+// foreach ($user as $row ) {
+//       if($row['user_role']=="admin"){
+//           return TRUE;
+//       }else{
+//         return FALSE;
+//       }  
+    
+// }
 
+// }
+    
+// function exist_user($useremail){
+//       global $conn;
+
+//       $stmt = $conn->prepare("SELECT * FROM users WHERE user_email='$useremail' ");
+//       $stmt->execute();
+//       $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//       $user = $stmt->fetchAll(); 
+//   foreach ($user as $email) {
+//     if($email['user_email'] > 0){
+//       return true;
+//     }else{
+//       return false;
+//     }
+  
+//   }
+// }
 
 ?>
