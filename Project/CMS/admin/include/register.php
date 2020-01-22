@@ -1,4 +1,20 @@
 <?php include "logincss.php" ?>
+
+<?php require '../vendor/autoload.php';
+// $dotenv = new \Dotenv\Dotenv(__DIR__);
+// $dotenv->load();
+
+
+
+
+// $options = array(
+//   'cluster' => 'us2',
+//   'useTLS' => true
+// );
+// $pusher =new Pusher\Pusher('3ec22af24954811213f6','ee0f53634ee878d30c48','934535',$options);
+
+
+?>
 <?php
 if(isset($_GET['lang']) && !empty($_GET['lang'])){
   $_SESSION['lang'] = $_GET['lang'];
