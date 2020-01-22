@@ -23,7 +23,6 @@ $blog = $stmt->fetch();
 }  
     
     if(isset($_POST['unlike'])){
-        setcookie( $cookie_name, $cookie_value, time() - 360000);
         $cookie_value = 'black';
         setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
         $_SESSION['color']="black";
@@ -220,8 +219,8 @@ $blog = $stmt->fetch();
         echo '
         <form method="post">
         '; 
-        $color =$_SESSION['color'];
-        if($color=="blue"){
+      
+        if($_SESSION['color']=="blue"){
 echo'
         <button name="unlike" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
         }else{
