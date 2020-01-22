@@ -1,12 +1,13 @@
 
+
 <?php include "include/database.php" ?>
 <?php include "function.php" ?>
 
-<?php ob_start(); ?>
+<?php ob_start();?>
 
 <?php 
 if(isset($_SESSION['username'])){
-
+ 
         $userid = $_SESSION['uid'];
         $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = '$userid' ");
         $stmt->execute();
@@ -67,7 +68,7 @@ foreach ($user as $u) {
 
   <link href="css/style.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+  <script src="vendor/jquery/jquery.min.js"></script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
