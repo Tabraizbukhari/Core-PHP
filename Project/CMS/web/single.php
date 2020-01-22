@@ -1,195 +1,384 @@
 <?php include "include/database.php" ?>
 <?php include "include/header.php" ?>
-<?php include "include/navbar.php" ?>
-<?php if(isset($_GET['search'])){
-    $search =  $_GET['search'];
-}
-error_reporting(0);
+<?php
 
-if($search == ""){
-    echo'
-    <!-- ##### Breadcumb Area Start ##### -->
-    <div class="breadcumb-area bg-img" style="background-image: url(img/bg-img/b1.jpg);">
-        <div class="container h-100">
-            <div class="row h-100 align-items-center">
-                <div class="col-12">
-                    <div class="breadcumb-content text-center">
-                        <h2>about us</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ##### Breadcumb Area End ##### -->
-';
-?>
-<?php 
+if(isset($_GET['blog_id'])){
+    $id =$_GET['blog_id'];
 
-
-$stmt = $conn->prepare("SELECT * FROM about  ORDER BY abt_id DESC Limit 1");
+$stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-$abt = $stmt->fetch();
-
-   $content1 = substr($abt['abt_content'],0,290);
-   $content2 = substr($abt['abt_content'],260,360);
-
-echo'
-    <!-- ##### Blog Wrapper Start ##### -->
-    <div class="blog-wrapper section-padding-100-0 clearfix">
-        <div class="container">
-            <div class="row align-items-end">
-                <!-- Single Blog Area -->
-                <div class="col-12 col-lg-4">
-                    <div class="single-blog-area clearfix mb-100">
-                        <!-- Blog Content -->
-                        <div class="single-blog-content">
-                            <div class="line"></div>
-                            <a href="#" class="post-tag">'.$abt['abt_tag'].'</a>
-                            <h4><a href="#" class="post-headline">'.$abt['abt_head'].'</a></h4>
-                            <p class="mb-3">'.$content1.'</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Blog Area -->
-                <div class="col-12 col-lg-4">
-                    <div class="single-blog-area clearfix mb-100">
-                        <!-- Blog Content -->
-                        <div class="single-blog-content">
-                            <p class="mb-3">'.$content2.'</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Blog Area -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-catagory-area clearfix mb-100">
-                        <img src="'.$abt['abt_img'].'" alt="">
-                        <!-- Catagory Title -->
-                        <div class="catagory-title">
-                            <a href="#">'.$abt['abt_img_title'].'</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ##### Blog Wrapper End ##### -->
-'; 
-echo'
-<!-- ##### Blog Wrapper Start ##### -->
-<div class="blog-wrapper section-padding-100-0 clearfix">
-<div class="container">
-<div class="row">
-    <!-- Single Blog Area  -->';
+$blog = $stmt->fetch();
     
-$sqlss="SELECT * FROM blog ORDER BY blog_id DESC";
-$stmts=$conn->prepare($sqlss);
-$stmts->execute();
-$results = $stmts->setFetchMode(PDO::FETCH_ASSOC);
-$bloger = $stmts->fetchAll();
-
-    foreach($bloger as $blog){
-
-        if($blog['post_status'] == "published"){
+    $_SESSION['cookie'] =$cookie_name = $id;
+    $cookie_value = $id ;
     
-                         $content =   substr($blog['content'],0,200);
-                         $date = substr($blog['blog_date'],0,6);
-echo'
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="single-blog-area blog-style-2 mb-100">
-            <div class="single-blog-thumbnail">
-            <a href="single.php?blog_id='.$blog['blog_id'].'"> <img src="'.$blog['feature_img'].'" alt=""></a>
-                <div class="post-date">
-                <a href="single.php?blog_id='.$blog['blog_id'].'">'.$date.'</a>
-                </div>
-            </div>
-            <!-- Blog Content -->
-            <div class="single-blog-content mt-50">
-                <div class="line"></div>
-                <a href="single.php?blog_id='.$blog['blog_id'].'" class="post-tag">'.$blog['tags'].'</a>
-                <h4><a href="single.php?blog_id='.$blog['blog_id'].'" class="post-headline">'.$blog['head'].'</a></h4>
-                <p>'.$content.'</p>
-                <div class="post-meta">
-                    <p>By <a href="#">'.$blog['author_name'].'</a></p>
-                    <p>'.$blog['comment_count'].' comments</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  ';} }
-  echo'
-</div>
-</div>
-</div>   
-';                 
+    $_SESSION['cookie'] =$cookie_name = $id;
+   
+     
+    if(isset($_POST['likebtn'])){ 
+        $cookie_value = 'blue';
+        setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
+    $_SESSION['color']= "blue";
+    
+    }  
+    
+    if(isset($_POST['unlike'])){
+        setcookie( $cookie_name, $cookie_value, time() - 360000);
+        $cookie_value = 'black';
+        setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
+        $_SESSION['color']="black";
+      
+    }
+    if(isset($_COOKIE[$cookie_name])==($id)){
+    echo' 
+    <style>
+        .fa-thumbs-up{
+        color:'.$_SESSION['color']. '!important;
+        }
+    
+        </style>';
+    }
+}
+    // if($_COOKIE[$cookie_name]== $id){
+
+    //         echo' 
+    //         <style>
+    //             .fa-thumbs-up{
+    //             color:blue;
+            
+    //             </style>';
+    //     }
+   
+
+//       if(isset($_GET['blog_id'])){
+
+//         $id = $_GET['blog_id'];
+// if(isset($_POST['likebtn'])){
+
+// $stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
+// $stmt->execute();
+// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+// $blog = $stmt->fetch();
+
+//     $_SESSION['cookiename'] =  $cookie_name =$blog['category_id'];
+//    $_SESSION['cookievalue']= $cookie_value = "blue";
+      
+
+//      $sql = "UPDATE blog SET likes = likes+1 WHERE blog_id='$id'";
+// $lk = $conn->exec($sql);
+//       }
+
+
+
+
+// if(isset($_POST['unlike'])){
+//     // $_SESSION['cookiename'] =  $cookie_name = "user";
+//     //  $_SESSION['cookievalue']= $cookie_value = "black";
         
+  
+//        $sql = "UPDATE blog SET likes = likes-1 WHERE blog_id='$id'";
+//   $lk = $conn->exec($sql); 
+//   session_destroy();
+        
+//  header("location:single.php?blog_id=$id" );
+  
+//   }
+// if(isset($_SESSION['cookiename']) && ($id)){
+//     setcookie( $_SESSION['cookiename'], $id, time() + (86400 * 30), "/"); 
+// } 
+
+// // var_dump($_SESSION); 
+// $stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
+// $stmt->execute();
+// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+// $blog = $stmt->fetch();
+
+// if(isset($_SESSION['cookiename']) == $blog['category_id']){
+//     if(isset($_SESSION['cookievalue'])){
+//     echo' <style>
+//     .fa-thumbs-up{
+//     color:'.$_SESSION['cookievalue'].'
+
+//     </style>';
+//     }else{
+//         $_SESSION['count']=0;
+//     }
+// }
+//                 }
+    //  $cookie_name = "like";
+    // $cookie_value= "red";
+    // setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
+// if(isset($_POST['likebtn'])){
+
+//     $cookie_name = "user";
+//     $cookie_value= "blue";
+ 
+
+//  ';}
+
+
+// }
+// if(isset($_POST['unlikebtn'])){
+//     $cookie_name = "user";
+//     $cookie_value= "black";
+//    if(isset($_COOKIE[$cookie_name])){
+//         echo' <style>
+//      .fa-thumbs-up{
+//          color:'.$_COOKIE[$cookie_name].'
+//      </style>
+//      ';}
+
+//      }
+//     //  $cookie_name= "user";
+//      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+
+// if(isset($_POST['liked'])){
+
+//     $bid = $_POST['post_id'];
+
+//     $sql = "SELECT * FROM blog WHERE blog_id='$bid'";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->execute();
+//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//     $liked = $stmt->fetchAll();
+//    foreach ($liked as $like) {
+
+//     $sql = "SELECT count(likes) FROM blog  WHERE blog_id='$bid' "; 
+//     $result = $conn->prepare($sql); 
+//     $result->execute(); 
+//     $numberlike = $result->fetchColumn();
+
+
+// } 
+// $sql = "UPDATE blog SET likes = likes+1 WHERE blog_id='$bid'";
+// $lk = $conn->exec($sql);
+
+// } 
+ 
+// if(isset($_POST['unliked'])){
+//     $bid = $_POST['post_id'];
+
+//     $sql = "SELECT * FROM blog WHERE blog_id='$bid'";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->execute();
+//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//     $liked = $stmt->fetchAll();
+//    foreach ($liked as $like) {
+  
+  
+   
+// } 
+// $sql = "UPDATE blog SET likes = likes-1 WHERE blog_id='$bid'";
+// $un = $conn->exec($sql);
+// } 
+
+
 ?>
 
-    <?php 
-    // include "include/count_section.php" 
-} 
-    else{
-                                          
-        $sqlss="SELECT * FROM blog WHERE head LIKE '%$search%' Or tags LIKE '%$search%' Or category_id LIKE '%$search%'";
-        $stmts=$conn->prepare($sqlss);
-        $stmts->bindValue(':keyword','%'.$search.'%');
-        $stmts->execute();
-        $results = $stmts->setFetchMode(PDO::FETCH_ASSOC);
-        $bloger = $stmts->fetchAll();
-    
-            foreach($bloger as $blog){
+<?php include "include/navbar.php" ?>
+<?php addcomment();
+?>
 
-                if($blog['post_status'] == "published"){
-            
-                                 $content =   substr($blog['content'],0,200);
-                                 $date = substr($blog['blog_date'],0,6);
+<?php 
+
+    //  if(isset($_COOKIE[$cookie_name])){
+    //     echo' <style>
+    //  .fa-thumbs-up{
+    //      color:'.$_COOKIE[$cookie_name].'
+     
+    //  </style>
+    //  ';}
+?>
+
+<!-- ##### Single Blog Area Start ##### -->
+    <div class="single-blog-wrapper section-padding-0-100">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-9">
+                    <div class="single-blog-area blog-style-2 mb-50">
+                       <?php if(isset($_GET['blog_id'])){
+
+                             $id = $_GET['blog_id'];
+                
+                    //     $stmt = $conn->prepare("SELECT tags FROM blog WHERE blog_id = '$id' ORDER BY blog_id DESC  ");
+                    //     $stmt->execute();
+                    //     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                    //     $bloger = $stmt->fetchAll();
+                    //     print_r($bloger);
+                    //     foreach ($bloger as $blog) {
+                    //         $b = $blog['tags'];
+                    //         echo $b;
+                    //  echo  $co = substr($b,0,5);
+                    //     }
+                    
+            if(isset($_SESSION['username'])){
+                echo'<a class="btn btn-primary float-right" href="../admin/post.php?source=editpost&blog_id='.$id.'">Edit post</a>';
+        }
+        echo'    <div class=" pull-right">
+        '; 
+        echo '
+        <form method="post">
+        '; if($_SESSION['color']=="blue"){
 echo'
-<!-- ##### Blog Wrapper Start ##### -->
-<div class="blog-wrapper section-padding-100-0 clearfix">
-    <div class="container">
-        <div class="row">
-            <!-- Single Blog Area  -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="single-blog-area blog-style-2 mb-100">
-                    <div class="single-blog-thumbnail">
-                    <a href="single.php?blog_id='.$blog['blog_id'].'"> <img src="'.$blog['feature_img'].'" alt=""></a>
-                        <div class="post-date">
-                        <a href="single.php?blog_id='.$blog['blog_id'].'">'.$date.'</a>
-                        </div>
+        <button name="unlike" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
+        }else{
+                    echo ' <br><button name="likebtn" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
+        }
+        
+
+
+            echo'
+        </form>
+        ';
+    //     echo'       
+
+    //     <form method="post">
+    //    '; if($_COOKIE[$cookie_name] == "black"){
+    //        echo' <button name="likebtn" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
+    //     }else{ echo' <button name="unlikebtn" class="btn unlike" ><i class="fa fa-thumbs-down" aria-hidden="true"></i> </button>'; }
+    //   echo'   </form>
+    //       ';
+         
+    //       echo'               <a href="#" class=" unlike btn-link btn"> <h1><i class="fa fa-thumbs-down" aria-hidden="true"></i></h1></a>
+    // ';   
+                   echo'     </div>'; 
+        //blog select single
+                        blog_post_select($id);
+                    
+                 if(!isset($_SESSION['username'])){       
+                $sqlc= "UPDATE blog  Set views_count= views_count + 1 WHERE blog_id = '$id' ";
+                $conn ->exec($sqlc);
+                 }
+               
+                                                         } 
+                                        
+            $stmt = $conn->prepare("SELECT * FROM comment");
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $comment = $stmt->fetchAll();     
+
+
+           
+            if(isset($_GET['ids'])){
+                $myid = $_GET['ids'];
+              
+                $sql= "DELETE FROM reply WHERE id='$myid' ";
+               $conn ->exec($sql);
+        
+            }
+            ?>
+                   
+                    <!-- Comment Area Start -->
+                    <div class="comment_area clearfix mt-70">
+                        <h5 class="title">Comments</h5>
+
+                        <ol>
+                          
+                        <?php if(isset($_GET['blog_id'])){
+
+$id = $_GET['blog_id'];    comment_select($id);  }?>
+                        </ol>
                     </div>
-                    <!-- Blog Content -->
-                    <div class="single-blog-content mt-50">
-                        <div class="line"></div>
-                        <a href="single.php?blog_id='.$blog['blog_id'].'" class="post-tag">'.$blog['tags'].'</a>
-                        <h4><a href="single.php?blog_id='.$blog['blog_id'].'" class="post-headline">'.$blog['head'].'</a></h4>
-                        <p>'.$content.'</p>
-                        <div class="post-meta">
-                            <p>By <a href="#">'.$blog['author_name'].'</a></p>
-                            <p>'.$blog['comment_count'].' comments</p>
+
+                    <div class="post-a-comment-area mt-70">
+                        <h5>Leave a reply</h5>
+                        <!-- Reply Form -->
+                        <form action="#" method="post">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="group">
+                                        <input required type="text" name="name" id="name" required>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="group">
+                                        <input  required type="email" name="email" id="email" required>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="group">
+                                        <input  required type="text" name="subject" id="subject" required>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Subject</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="group">
+                                        <textarea   required name="message" id="message" required></textarea>
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Comment</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" name="addcomment" class="btn original-btn">Reply</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            
+                <?php include "include/sidebar.php" ?>
                         </div>
                     </div>
                 </div>
             </div>
-          
         </div>
     </div>
-</div>
-<!-- ##### Blog Wrapper End ##### -->
-                               
-            ';  
-}
-    }  if($blog['post_status'] != "published"){
-    echo "<h1 class='text-center label-danger'>POST NOT FOUND </h1>";
 
-    }                                                     
+    <?php include "include/footer.php" ?>
+<?php 
+if(isset($_GET['blog_id'])){
 
-                                         
-}
+    $id = $_GET['blog_id'];    
+
+?>
+    
+    <!-- <script>
 
 
-    ?>
+    $(document).ready(function() {
+        var post_id =  <?php echo $id; ?>;
+        var user_id = 25;
+        $('.like').click(function() {
+             $.ajax({
+                    url: "single.php?blogid=<?php echo $id; ?>",
+                    type: "post",
+                    data:{
+                        'liked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
 
+                   }
+             });
+        });
+
+
+        $('.unlike').click(function() {
+             $.ajax({
+                    url: "single.php?blogid=<?php echo $id; ?>",
+                    type: "post",
+                    data:{
+                        'unliked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
+
+                   }
+             });
+        });
+    });
 
   
+    </script> -->
 
-   <?php include "include/footer.php" ?>
+<?php } ?>
