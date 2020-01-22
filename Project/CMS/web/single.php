@@ -12,8 +12,6 @@ $blog = $stmt->fetch();
     
     $_SESSION['cookie'] =$cookie_name = $id;
     $cookie_value = $id ;
-    
-    $_SESSION['cookie'] =$cookie_name = $id;
    
      
     if(isset($_POST['likebtn'])){ 
@@ -21,7 +19,8 @@ $blog = $stmt->fetch();
         setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
     $_SESSION['color']= "blue";
     
-    }  
+    header('location: single.php?blog_id='.$id.'');    
+}  
     
     if(isset($_POST['unlike'])){
         setcookie( $cookie_name, $cookie_value, time() - 360000);
@@ -220,12 +219,15 @@ $blog = $stmt->fetch();
         '; 
         echo '
         <form method="post">
-        '; if($_SESSION['color']=="blue"){
+        '; 
+        $color =$_SESSION['color'];
+        if($color=="blue"){
 echo'
         <button name="unlike" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
         }else{
                     echo ' <br><button name="likebtn" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
         }
+    
         
 
 
