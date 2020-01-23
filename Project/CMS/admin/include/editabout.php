@@ -1,5 +1,4 @@
-<?php include "include/header.php" ?>
-<?php include "include/navbar.php" ?>
+
 <?php 
 if(isset($_GET['abt_id'])){
    $abid = $_GET['abt_id'];
