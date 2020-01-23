@@ -1,4 +1,6 @@
 <?php include "include/header.php" ?>
+<?php
+if($_SESSION['role']=="admin"){ ?>
 <?php include "include/navbar.php" ?>
 
 <?php $name = $_SERVER['PHP_SELF']; ?>
@@ -112,3 +114,7 @@ $cate = $stmt->fetchAll(); ?>
     </div>
    
 <?php include "include/footer.php" ?>
+
+  <?php }else{
+   header('location: index.php'); 
+  }?>
