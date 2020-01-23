@@ -132,6 +132,7 @@ foreach ($blog as $bs ) {
            <td>'.$bs['tags'].'</td>  
            <td>'.$bs['comment_count'].'</td> 
            <td>'.$bs['views_count'].'</td>  
+           <td>'.$bs['likes'].'</td>  
            <td>'.$bs['post_status'].'</td>
            <td>'.$bs['blog_date'].'</td>
            
@@ -173,7 +174,8 @@ foreach ($blog as $bs ) {
            <td>'.$bs['category_id'].'</td>  
            <td>'.$bs['tags'].'</td>  
            <td><a href="comment.php?comment='.$bs['blog_id'].'">'.$bs['comment_count'].'</a></td> 
-           <td>'.$bs['views_count'].'</td>  
+           <td>'.$bs['views_count'].'</td> 
+           <td>'.$bs['likes'].'</td>  
            <td>'.$bs['post_status'].'</td>
            <td>'.$bs['blog_date'].'</td>
            
@@ -200,7 +202,7 @@ foreach ($blog as $bs ) {
 function addpost(){
   global $conn;
   if(isset($_POST['addpost'])){
-    
+    $userids  = $_SESSION['id'];
     $title = $_POST['title'];
     $content = $_POST['content'];
     $bimg  = $_FILES['blog_img']['name'];
@@ -245,7 +247,7 @@ function addpost(){
     move_uploaded_file(  $authortemp , $author_tar);
   
 $sql = "INSERT INTO blog(head,content,blog_img,feature_img,tags,blog_date,post_status,
-author_name,author_msg,views_count,category_id,author_img) VALUES ('$title','$content','$blog_tar','$feature_tar','$tag','$date','$status','$author','$authormsg','$view','$category','$author_tar') ";
+author_name,author_msg,views_count,category_id,author_img,post_user_id) VALUES ('$title','$content','$blog_tar','$feature_tar','$tag','$date','$status','$author','$authormsg','$view','$category','$author_tar','$userids') ";
  $conn ->exec($sql);
  
    }
@@ -367,10 +369,14 @@ else {
 function viewallcomment(){
 
   global $conn;
-  if(isset($_GET['comment'])){
-    $commnetgetid =  $_GET['comment'];
+  $sessionuserid  =  $_SESSION['id'];
+  $userrole       =  $_SESSION['role'];
+
+if($userrole != "admin"){
+
   
-$stmt = $conn->prepare("SELECT * FROM comment WHERE comment_post_id = '$commnetgetid' ");
+  
+$stmt = $conn->prepare("SELECT * FROM comment  WHERE post_admin_id ='$sessionuserid'  ");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 $comment = $stmt->fetchAll(); 
@@ -378,6 +384,9 @@ $comment = $stmt->fetchAll();
 
 // <td>'.$bs['comment_post_id'].'</td>  
 foreach ($comment as $bs ) {
+
+  if($bs['post_admin_id'] == $sessionuserid){
+
   echo'  <tr>
            <td>'.$bs['comment_id'].'</td>  
           <td> '.$bs['comment_name'].' </td> 
@@ -385,7 +394,9 @@ foreach ($comment as $bs ) {
            <td>'.$bs['comment_content'].'</td>  
            <td>'.$bs['comment_email'].'</td>
            <td>'.$bs['comment_status'].'</td>
-           <td>'.$bs['comment_date'].'</td>    
+           <td>'.$bs['comment_date'].'</td>  
+           <td>'.$bs['post_admin_id'].'</td>
+           <td>first</td>        
            ';  
            $post_id = $bs['comment_post_id'];
            $stmt = $conn->prepare("SELECT * FROM blog where blog_id='$post_id'");
@@ -408,26 +419,29 @@ foreach ($comment as $bs ) {
           </tr>
       
       ';
+         }
      
      
-    } 
-  }else{
-    $stmt = $conn->prepare("SELECT * FROM comment");
+    
+  }
+}else{
+    $stmt = $conn->prepare("SELECT * FROM comment ");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 $comment = $stmt->fetchAll(); 
 
-
 // <td>'.$bs['comment_post_id'].'</td>  
 foreach ($comment as $bs ) {
   echo'  <tr>
+  <td>'.$bs['post_admin_id'].'</td>  
            <td>'.$bs['comment_id'].'</td>  
           <td> '.$bs['comment_name'].' </td> 
          <td>'.$bs['comment_subject'].'</td> 
            <td>'.$bs['comment_content'].'</td>  
            <td>'.$bs['comment_email'].'</td>
            <td>'.$bs['comment_status'].'</td>
-           <td>'.$bs['comment_date'].'</td>    
+           <td>'.$bs['comment_date'].'</td>  
+           <td>Second</td>  
            ';  
            $post_id = $bs['comment_post_id'];
            $stmt = $conn->prepare("SELECT * FROM blog where blog_id='$post_id'");
@@ -511,16 +525,6 @@ function adduser(){
   global $conn;
 
 
- $options = array(
-      'cluster' => 'ap3',
-      'useTLS' => true
-    );
-    $pusher = new Pusher\Pusher(
-      'dc2b32aeb35c85a6b41f',
-      '753a6d5719210238ca33',
-      '935556',
-      $options
-    );
   
   if(isset($_POST['adduser'])){
       
@@ -578,8 +582,6 @@ user_role,user_status,user_date,city,user_address,user_img,randsalt) VALUES ('$f
   $conn ->exec($sql);
  
  
-    $data['message'] =$fname.''.$lname;
-    $pusher->trigger('my-channel', 'my-event', $data);
 }
 
 }
@@ -591,7 +593,7 @@ if(isset($_POST['create'])){
   $lname = $_POST['lname'];
   $age = $_POST['age'];
   $gender = $_POST['gender'];
-
+  $role = 'blog_poster';
   $email = $_POST['email'];
   $city = $_POST['city'];
   $address = $_POST['address'];
@@ -625,9 +627,20 @@ if(isset($_POST['create'])){
   
 
 $sql = "INSERT INTO users (user_first_name,user_last_name,user_age,user_gender,user_email,
-user_password,user_status,user_date,city,user_address,user_img,randsalt) VALUES ('$fname','$lname','$age','$gender','$email','$pass','$status','$date','$city','$address','$target_dir','$slat')
+user_password,user_status,user_date,city,user_address,user_img,randsalt,user_role) VALUES ('$fname','$lname','$age','$gender','$email','$pass','$status','$date','$city','$address','$target_dir','$slat','$role')
 ";
 $conn ->exec($sql);
+
+$options = array(
+  'cluster' => 'ap3',
+  'useTLS' => true
+);
+$pusher = new Pusher\Pusher(
+  'dc2b32aeb35c85a6b41f',
+  '753a6d5719210238ca33',
+  '935556',
+  $options
+);
 $data['message'] =$fname.''.$lname;
 $pusher->trigger('my-channel', 'my-event', $data);
 }
@@ -970,23 +983,24 @@ foreach ($about as $bs ) {
 
       }
 
-// function is_admin($userrole = ""){
-//   global $conn;
+function is_admin($userrole = ""){
+  global $conn;
     
-// $stmt = $conn->prepare("SELECT * FROM users WHERE user_role ='$userrole' ");
-// $stmt->execute();
-// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-// $user = $stmt->fetchAll(); 
-// foreach ($user as $row ) {
-//       if($row['user_role']=="admin"){
-//           return TRUE;
-//       }else{
-//         return FALSE;
-//       }  
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_role ='$userrole' ");
+$stmt->execute();
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$user = $stmt->fetchAll(); 
+foreach ($user as $row ) {
+      if($row['user_role']=="admin"){
+          return TRUE;
+      }else{
+        return FALSE;
+      }  
+      var_dump($row['user_role']); die();
     
-// }
+}
 
-// }
+}
     
 // function exist_user($useremail){
 //       global $conn;
