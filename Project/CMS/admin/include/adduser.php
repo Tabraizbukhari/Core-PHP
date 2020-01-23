@@ -1,5 +1,3 @@
-<?php include "include/header.php" ?>
-<?php include "include/navbar.php" ?>
 
 <?php $name = $_SERVER['PHP_SELF']; ?>
 
@@ -103,3 +101,4 @@
 
 
   <?php include "include/footer.php" ?>
+
