@@ -2,192 +2,77 @@
 <?php include "include/header.php" ?>
 <?php
 
-if(isset($_GET['blog_id'])){
-    $id =$_GET['blog_id'];
+if(isset($_POST['liked'])){
 
-$stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
+    $post_id = $_POST['post_id'];
+    $userid = $_POST['user_id'];
+   
+    //1 select post
+$stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$post_id'");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 $blog = $stmt->fetch();
-    
-    $_SESSION['cookie'] =$cookie_name = $id;
-    $cookie_value = $id ;
-   
-     
-    if(isset($_POST['likebtn'])){ 
-        $cookie_value = 'blue';
-        setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
-    $_SESSION['color']= "blue";
-    
-    header('location: single.php?blog_id='.$id.'');    
-}  
-    
-    if(isset($_POST['unlike'])){
-        $cookie_value = 'black';
-        setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/");
-        $_SESSION['color']="black";
-      
-    }
-    if(isset($_COOKIE[$cookie_name])==($id)){
-    echo' 
-    <style>
-        .fa-thumbs-up{
-        color:'.$_SESSION['color']. '!important;
-        }
-    
-        </style>';
-    }
+$like = $blog['likes'];
+
+
+$sql = "SELECT count(likes) FROM blog "; 
+$result = $conn->prepare($sql); 
+$result->execute(); 
+$number_of_blog = $result->fetchColumn();
+
+if($number_of_blog >= 1){
+    echo $_POST['post_id'];
 }
-    // if($_COOKIE[$cookie_name]== $id){
+//2 update post like increment
+$sql = "UPDATE blog SET likes=likes+1 WHERE blog_id='$post_id'";
+$conn ->exec($sql);
+//3 create like for post
 
-    //         echo' 
-    //         <style>
-    //             .fa-thumbs-up{
-    //             color:blue;
-            
-    //             </style>';
-    //     }
+$sql = "INSERT INTO likes(user_like_id,blog_id) VALUES('$userid','$post_id')";
+$conn ->exec($sql);
+
+
+}
+//unlike 
+if(isset($_POST['unliked'])){
+
+    $post_id = $_POST['post_id'];
+    $userid = $_POST['user_id'];
    
-
-//       if(isset($_GET['blog_id'])){
-
-//         $id = $_GET['blog_id'];
-// if(isset($_POST['likebtn'])){
-
-// $stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
-// $stmt->execute();
-// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-// $blog = $stmt->fetch();
-
-//     $_SESSION['cookiename'] =  $cookie_name =$blog['category_id'];
-//    $_SESSION['cookievalue']= $cookie_value = "blue";
-      
-
-//      $sql = "UPDATE blog SET likes = likes+1 WHERE blog_id='$id'";
-// $lk = $conn->exec($sql);
-//       }
+    //1 select post fetching
+$stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$post_id'");
+$stmt->execute();
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$blog = $stmt->fetch();
+$like = $blog['likes'];
 
 
+$sql = "SELECT count(likes) FROM blog "; 
+$result = $conn->prepare($sql); 
+$result->execute(); 
+$number_of_blog = $result->fetchColumn();
+
+if($number_of_blog >= 1){
+    echo $_POST['post_id'];
+}
+
+//2 Delete like on likes table
+$sql = "DELETE FROM likes WHERE blog_id='$post_id' AND user_like_id='$userid'";
+$conn ->exec($sql);
+
+//3 update post like decrement
+$sql = "UPDATE blog SET likes=likes-1 WHERE blog_id='$post_id'";
+$conn ->exec($sql);
 
 
-// if(isset($_POST['unlike'])){
-//     // $_SESSION['cookiename'] =  $cookie_name = "user";
-//     //  $_SESSION['cookievalue']= $cookie_value = "black";
-        
-  
-//        $sql = "UPDATE blog SET likes = likes-1 WHERE blog_id='$id'";
-//   $lk = $conn->exec($sql); 
-//   session_destroy();
-        
-//  header("location:single.php?blog_id=$id" );
-  
-//   }
-// if(isset($_SESSION['cookiename']) && ($id)){
-//     setcookie( $_SESSION['cookiename'], $id, time() + (86400 * 30), "/"); 
-// } 
 
-// // var_dump($_SESSION); 
-// $stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id='$id'");
-// $stmt->execute();
-// $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-// $blog = $stmt->fetch();
-
-// if(isset($_SESSION['cookiename']) == $blog['category_id']){
-//     if(isset($_SESSION['cookievalue'])){
-//     echo' <style>
-//     .fa-thumbs-up{
-//     color:'.$_SESSION['cookievalue'].'
-
-//     </style>';
-//     }else{
-//         $_SESSION['count']=0;
-//     }
-// }
-//                 }
-    //  $cookie_name = "like";
-    // $cookie_value= "red";
-    // setcookie( $cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
-// if(isset($_POST['likebtn'])){
-
-//     $cookie_name = "user";
-//     $cookie_value= "blue";
- 
-
-//  ';}
-
-
-// }
-// if(isset($_POST['unlikebtn'])){
-//     $cookie_name = "user";
-//     $cookie_value= "black";
-//    if(isset($_COOKIE[$cookie_name])){
-//         echo' <style>
-//      .fa-thumbs-up{
-//          color:'.$_COOKIE[$cookie_name].'
-//      </style>
-//      ';}
-
-//      }
-//     //  $cookie_name= "user";
-//      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
-
-// if(isset($_POST['liked'])){
-
-//     $bid = $_POST['post_id'];
-
-//     $sql = "SELECT * FROM blog WHERE blog_id='$bid'";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->execute();
-//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-//     $liked = $stmt->fetchAll();
-//    foreach ($liked as $like) {
-
-//     $sql = "SELECT count(likes) FROM blog  WHERE blog_id='$bid' "; 
-//     $result = $conn->prepare($sql); 
-//     $result->execute(); 
-//     $numberlike = $result->fetchColumn();
-
-
-// } 
-// $sql = "UPDATE blog SET likes = likes+1 WHERE blog_id='$bid'";
-// $lk = $conn->exec($sql);
-
-// } 
- 
-// if(isset($_POST['unliked'])){
-//     $bid = $_POST['post_id'];
-
-//     $sql = "SELECT * FROM blog WHERE blog_id='$bid'";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->execute();
-//     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-//     $liked = $stmt->fetchAll();
-//    foreach ($liked as $like) {
-  
-  
-   
-// } 
-// $sql = "UPDATE blog SET likes = likes-1 WHERE blog_id='$bid'";
-// $un = $conn->exec($sql);
-// } 
+}
 
 
 ?>
 
 <?php include "include/navbar.php" ?>
-<?php addcomment();
-?>
 
-<?php 
-
-    //  if(isset($_COOKIE[$cookie_name])){
-    //     echo' <style>
-    //  .fa-thumbs-up{
-    //      color:'.$_COOKIE[$cookie_name].'
-     
-    //  </style>
-    //  ';}
-?>
 
 <!-- ##### Single Blog Area Start ##### -->
     <div class="single-blog-wrapper section-padding-0-100">
@@ -199,7 +84,15 @@ $blog = $stmt->fetch();
                        <?php if(isset($_GET['blog_id'])){
 
                              $id = $_GET['blog_id'];
-                
+                             $stmt = $conn->prepare("SELECT * FROM blog WHERE blog_id = '$id' ORDER BY blog_id DESC  ");
+                             $stmt->execute();
+                             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                             $bloger = $stmt->fetchAll();
+                             foreach ($bloger as $bid) {
+                                $userid = $bid['post_user_id'];
+                             
+                             addcomment($userid);
+                             }
                     //     $stmt = $conn->prepare("SELECT tags FROM blog WHERE blog_id = '$id' ORDER BY blog_id DESC  ");
                     //     $stmt->execute();
                     //     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -214,40 +107,13 @@ $blog = $stmt->fetch();
             if(isset($_SESSION['username'])){
                 echo'<a class="btn btn-primary float-right" href="../admin/post.php?source=editpost&blog_id='.$id.'">Edit post</a>';
         }
-        echo'    <div class=" pull-right">
-        '; 
-        echo '
-        <form method="post">
-        '; 
-      
-        if($_SESSION['color']=="blue"){
-echo'
-        <button name="unlike" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
-        }else{
-                    echo ' <br><button name="likebtn" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
-        }
-    
+     
         
 
-
-            echo'
-        </form>
-        ';
-    //     echo'       
-
-    //     <form method="post">
-    //    '; if($_COOKIE[$cookie_name] == "black"){
-    //        echo' <button name="likebtn" class="btn like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> </button>';
-    //     }else{ echo' <button name="unlikebtn" class="btn unlike" ><i class="fa fa-thumbs-down" aria-hidden="true"></i> </button>'; }
-    //   echo'   </form>
-    //       ';
-         
-    //       echo'               <a href="#" class=" unlike btn-link btn"> <h1><i class="fa fa-thumbs-down" aria-hidden="true"></i></h1></a>
-    // ';   
-                   echo'     </div>'; 
         //blog select single
+        
                         blog_post_select($id);
-                    
+                       
                  if(!isset($_SESSION['username'])){       
                 $sqlc= "UPDATE blog  Set views_count= views_count + 1 WHERE blog_id = '$id' ";
                 $conn ->exec($sqlc);
@@ -276,10 +142,11 @@ echo'
                         <h5 class="title">Comments</h5>
 
                         <ol>
-                          
+                          <hr>
                         <?php if(isset($_GET['blog_id'])){
 
 $id = $_GET['blog_id'];    comment_select($id);  }?>
+<hr>
                         </ol>
                     </div>
 
@@ -339,12 +206,54 @@ $id = $_GET['blog_id'];    comment_select($id);  }?>
 
     <?php include "include/footer.php" ?>
 <?php 
+
+
 if(isset($_GET['blog_id'])){
 
     $id = $_GET['blog_id'];    
 
 ?>
-    
+<?php $userid = $_SESSION['id']; ?>
+    <script>
+    $(document).ready(function(){
+        var post_id =  <?php echo $id; ?>;
+        var user_id = <?php echo $userid; ?>;
+
+        // like
+        $('.like').click(function() {
+            $.ajax({
+               url:    "single.php?blogid=<?php echo $id; ?>",
+               type:   "post",
+               data: {
+                        'liked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
+
+                   }
+            });
+            window.location.reload();
+        });
+
+        //unlike
+        $('.unlike').click(function() {
+            $.ajax({
+               url:    "single.php?blogid=<?php echo $id; ?>",
+               type:   "post",
+               data: {
+                        'unliked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
+
+                   }
+            });
+            window.location.reload();
+        });
+      
+    });
+
+    </script>
+
+
     <!-- <script>
 
 
@@ -383,3 +292,4 @@ if(isset($_GET['blog_id'])){
     </script> -->
 
 <?php } ?>
+
