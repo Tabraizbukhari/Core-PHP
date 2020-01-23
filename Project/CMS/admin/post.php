@@ -1,5 +1,7 @@
 <?php 
 
+
+
 if(isset($_GET['source'])){
 
     $source =$_GET['source'];
@@ -23,5 +25,6 @@ switch ($source) {
      default:
        include 'include/viewallpost.php';
         break;
-}
+}; 
+
 ?>
